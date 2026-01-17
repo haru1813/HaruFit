@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruFit - 프로토타입</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+        }
+        
+        /* 프로토타입 컨테이너 */
+        .prototype-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 0;
+            max-width: 1600px;
+            margin: 2rem auto;
+            overflow: hidden;
+        }
+        
+        .prototype-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .prototype-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .prototype-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .prototype-nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .prototype-nav-item i {
+            font-size: 1.1rem;
+        }
+        
+        .prototype-nav-item:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .prototype-nav-item.active {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .prototype-content {
+            padding: 2rem;
+        }
+        
+        .prototype-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .prototype-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        /* 카드 스타일 */
+        .prototype-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .prototype-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .card-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        /* 버튼 스타일 */
+        .btn-primary-custom {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary-custom:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background: var(--gray-200);
+            border: none;
+            color: var(--gray-700);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary-custom:hover {
+            background: var(--gray-300);
+            color: var(--gray-800);
+        }
+        
+        /* 통계 카드 */
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-card .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* 진행률 바 */
+        .progress-custom {
+            height: 24px;
+            background: var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-bar-custom {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: width 0.3s ease;
+        }
+        
+        /* 폼 스타일 */
+        .form-control-custom {
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control-custom:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+        
+        /* 테이블 스타일 */
+        .table-custom {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table-custom thead {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .table-custom tbody tr {
+            transition: background 0.2s;
+        }
+        
+        .table-custom tbody tr:hover {
+            background: var(--gray-50);
+        }
+        
+        /* 배지 스타일 */
+        .badge-custom {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        
+        .badge-success {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .badge-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .badge-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* 차트 영역 */
+        .chart-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        }
+        
+        /* 루틴 카드 */
+        .routine-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .routine-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+        }
+        
+        .routine-card .routine-title {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .routine-card .routine-info {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 운동 실행 카드 */
+        .exercise-card {
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .exercise-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .set-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* 일지 카드 */
+        .journal-card {
+            background: white;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .journal-date {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .journal-content {
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+        
+        /* 목표 카드 */
+        .goal-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .goal-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        /* 푸터 */
+        .prototype-footer {
+            background: var(--gray-800);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .prototype-container {
+                margin: 1rem auto;
+            }
+            
+            .prototype-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .prototype-logo {
+                font-size: 1.25rem;
+            }
+            
+            .prototype-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .prototype-nav-item {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.75rem;
+            }
+            
+            .prototype-nav-item span {
+                display: none; /* 모바일에서 텍스트 숨김, 아이콘만 표시 */
+            }
+            
+            .prototype-content {
+                padding: 1rem;
+            }
+            
+            .prototype-card {
+                padding: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 2rem;
+            }
+            
+            .card-title {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .prototype-container {
+                margin: 0.5rem auto;
+            }
+            
+            .prototype-header {
+                padding: 0.75rem;
+            }
+            
+            .prototype-logo {
+                font-size: 1.1rem;
+            }
+            
+            .prototype-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .prototype-nav-item {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .prototype-content {
+                padding: 0.75rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.75rem;
+            }
+        }
+        
+        /* 페이지 표시 */
+        .page-indicator {
+            position: sticky;
+            top: 0;
+            background: var(--gray-100);
+            padding: 0.5rem 1rem;
+            border-bottom: 2px solid var(--gray-200);
+            z-index: 100;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div style="background: var(--gray-50); padding: 1rem; margin-bottom: 2rem; border-radius: 8px; max-width: 1600px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">
+            <i class="bi bi-info-circle"></i> 모바일 반응형 디자인
+        </h3>
+        <p style="color: var(--gray-700); margin: 0; font-size: 0.9rem;">
+            모든 화면은 모바일, 태블릿, 데스크톱에서 최적화되어 있습니다. 
+            모바일(768px 이하)에서는 네비게이션이 아이콘 중심으로 표시되고, 그리드 레이아웃이 1컬럼으로 변경됩니다.
+            작은 모바일(576px 이하)에서는 네비게이션이 세로로 배치됩니다.
+        </p>
+    </div>
+    
+    <!-- 로그인 화면 -->
+    <div class="prototype-container" id="login-page">
+        <div class="page-indicator">로그인 화면</div>
+        <div class="prototype-content">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="prototype-card text-center">
+                        <h2 class="section-title mb-4">
+                            <i class="bi bi-person-circle"></i> 로그인
+                        </h2>
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label text-start w-100">이메일</label>
+                                <input type="email" class="form-control form-control-custom" placeholder="example@email.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-start w-100">비밀번호</label>
+                                <input type="password" class="form-control form-control-custom" placeholder="비밀번호를 입력하세요">
+                            </div>
+                            <button type="submit" class="btn btn-primary-custom w-100 mb-3">로그인</button>
+                            <p class="text-muted">
+                                계정이 없으신가요? <a href="#" class="text-decoration-none" style="color: var(--primary-color);">회원가입</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 회원가입 화면 -->
+    <div class="prototype-container" id="signup-page">
+        <div class="page-indicator">회원가입 화면</div>
+        <div class="prototype-content">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="prototype-card">
+                        <h2 class="section-title text-center mb-4">
+                            <i class="bi bi-person-plus"></i> 회원가입
+                        </h2>
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">이메일</label>
+                                <input type="email" class="form-control form-control-custom" placeholder="example@email.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">비밀번호</label>
+                                <input type="password" class="form-control form-control-custom" placeholder="최소 8자, 영문+숫자">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">비밀번호 확인</label>
+                                <input type="password" class="form-control form-control-custom" placeholder="비밀번호를 다시 입력하세요">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">닉네임</label>
+                                <input type="text" class="form-control form-control-custom" placeholder="2-20자">
+                            </div>
+                            <button type="submit" class="btn btn-primary-custom w-100 mb-3">회원가입</button>
+                            <p class="text-center text-muted">
+                                이미 계정이 있으신가요? <a href="#" class="text-decoration-none" style="color: var(--primary-color);">로그인</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 대시보드 -->
+    <div class="prototype-container" id="dashboard-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-list-check"></i>
+                    <span>루틴 관리</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>운동 기록</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-bullseye"></i>
+                    <span>목표</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-journal-text"></i>
+                    <span>일지</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-person"></i>
+                    <span>프로필</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>로그아웃</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="prototype-section">
+                <h2 class="section-title">
+                    <i class="bi bi-calendar-check"></i> 오늘의 운동
+                </h2>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="routine-card">
+                            <div class="routine-title">상체 루틴</div>
+                            <div class="routine-info">
+                                <i class="bi bi-list-ul"></i> 운동 종목: 5개<br>
+                                <i class="bi bi-clock"></i> 예상 시간: 45분<br>
+                                <i class="bi bi-calendar"></i> 마지막 실행: 2026-01-15
+                            </div>
+                            <button class="btn btn-primary-custom w-100 mt-3">
+                                <i class="bi bi-play-circle"></i> 시작하기
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="routine-card">
+                            <div class="routine-title">하체 루틴</div>
+                            <div class="routine-info">
+                                <i class="bi bi-list-ul"></i> 운동 종목: 4개<br>
+                                <i class="bi bi-clock"></i> 예상 시간: 40분<br>
+                                <i class="bi bi-calendar"></i> 마지막 실행: 2026-01-14
+                            </div>
+                            <button class="btn btn-primary-custom w-100 mt-3">
+                                <i class="bi bi-play-circle"></i> 시작하기
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="routine-card" style="border: 2px dashed var(--primary-color); background: var(--gray-50);">
+                            <div class="routine-title text-center">
+                                <i class="bi bi-plus-circle" style="font-size: 3rem; color: var(--primary-color);"></i>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-primary-custom">
+                                    <i class="bi bi-plus"></i> 새 루틴 만들기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prototype-section">
+                <h2 class="section-title">
+                    <i class="bi bi-graph-up"></i> 이번 주 통계
+                </h2>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card">
+                            <div class="stat-label">운동 횟수</div>
+                            <div class="stat-value">5회</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, var(--success-color) 0%, #34d399 100%);">
+                            <div class="stat-label">총 운동 시간</div>
+                            <div class="stat-value">12시간</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, var(--warning-color) 0%, #fbbf24 100%);">
+                            <div class="stat-label">목표 진행률</div>
+                            <div class="stat-value">75%</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">
+                            <div class="stat-label">연속 운동일</div>
+                            <div class="stat-value">7일</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prototype-section">
+                <h2 class="section-title">
+                    <i class="bi bi-clock-history"></i> 최근 운동 기록
+                </h2>
+                <div class="prototype-card">
+                    <table class="table table-custom">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>루틴</th>
+                                <th>운동 시간</th>
+                                <th>상세보기</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-01-15</td>
+                                <td>상체 루틴</td>
+                                <td>45분</td>
+                                <td>
+                                    <button class="btn btn-primary-custom" style="padding: 0.25rem 0.75rem;">
+                                        <i class="bi bi-eye"></i> 보기
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2026-01-14</td>
+                                <td>하체 루틴</td>
+                                <td>50분</td>
+                                <td>
+                                    <button class="btn btn-primary-custom" style="padding: 0.25rem 0.75rem;">
+                                        <i class="bi bi-eye"></i> 보기
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2026-01-13</td>
+                                <td>전신 루틴</td>
+                                <td>60분</td>
+                                <td>
+                                    <button class="btn btn-primary-custom" style="padding: 0.25rem 0.75rem;">
+                                        <i class="bi bi-eye"></i> 보기
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="prototype-footer">
+            <p class="mb-0">© 2026 HaruFit. All rights reserved.</p>
+        </div>
+    </div>
+    
+    <!-- 루틴 목록 -->
+    <div class="prototype-container" id="routine-list-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-list-check"></i>
+                    <span>루틴 관리</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>운동 기록</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-bullseye"></i>
+                    <span>목표</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-journal-text"></i>
+                    <span>일지</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-person"></i>
+                    <span>프로필</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-list-task"></i> 나의 루틴
+                </h2>
+                <button class="btn btn-primary-custom">
+                    <i class="bi bi-plus-circle"></i> 새 루틴 만들기
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="routine-card">
+                        <div class="routine-title">상체 루틴</div>
+                        <div class="routine-info">
+                            <i class="bi bi-list-ul"></i> 운동 종목: 5개<br>
+                            <i class="bi bi-clock"></i> 예상 시간: 45분<br>
+                            <i class="bi bi-calendar"></i> 마지막 실행: 2026-01-15
+                        </div>
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-primary-custom flex-fill">
+                                <i class="bi bi-play"></i> 시작
+                            </button>
+                            <button class="btn btn-secondary-custom">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-secondary-custom">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="routine-card">
+                        <div class="routine-title">하체 루틴</div>
+                        <div class="routine-info">
+                            <i class="bi bi-list-ul"></i> 운동 종목: 4개<br>
+                            <i class="bi bi-clock"></i> 예상 시간: 40분<br>
+                            <i class="bi bi-calendar"></i> 마지막 실행: 2026-01-14
+                        </div>
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-primary-custom flex-fill">
+                                <i class="bi bi-play"></i> 시작
+                            </button>
+                            <button class="btn btn-secondary-custom">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-secondary-custom">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="routine-card">
+                        <div class="routine-title">전신 루틴</div>
+                        <div class="routine-info">
+                            <i class="bi bi-list-ul"></i> 운동 종목: 6개<br>
+                            <i class="bi bi-clock"></i> 예상 시간: 60분<br>
+                            <i class="bi bi-calendar"></i> 마지막 실행: 2026-01-13
+                        </div>
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-primary-custom flex-fill">
+                                <i class="bi bi-play"></i> 시작
+                            </button>
+                            <button class="btn btn-secondary-custom">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-secondary-custom">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 루틴 생성/수정 -->
+    <div class="prototype-container" id="routine-create-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">대시보드</a>
+                <a href="#" class="prototype-nav-item active">루틴 관리</a>
+                <a href="#" class="prototype-nav-item">운동 기록</a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <h2 class="section-title">
+                <i class="bi bi-plus-circle"></i> 루틴 만들기
+            </h2>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">루틴 정보</h3>
+                <div class="mb-3">
+                    <label class="form-label">루틴 이름</label>
+                    <input type="text" class="form-control form-control-custom" placeholder="예: 상체 루틴">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">설명</label>
+                    <textarea class="form-control form-control-custom" rows="3" placeholder="루틴에 대한 설명을 입력하세요"></textarea>
+                </div>
+            </div>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">운동 종목 추가</h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">운동 종목 선택</label>
+                        <select class="form-control form-control-custom">
+                            <option>벤치프레스</option>
+                            <option>스쿼트</option>
+                            <option>데드리프트</option>
+                            <option>덤벨 플라이</option>
+                            <option>랫 풀다운</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">세트</label>
+                        <input type="number" class="form-control form-control-custom" value="3" min="1" max="20">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">횟수</label>
+                        <input type="number" class="form-control form-control-custom" value="10" min="1" max="100">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">무게 (kg)</label>
+                        <input type="number" class="form-control form-control-custom" value="80" min="0" max="500">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">휴식 시간 (초)</label>
+                        <input type="number" class="form-control form-control-custom" value="90" min="0" max="600">
+                    </div>
+                </div>
+                <button class="btn btn-primary-custom">
+                    <i class="bi bi-plus"></i> 운동 추가
+                </button>
+            </div>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">추가된 운동 목록</h3>
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>운동 종목</th>
+                            <th>세트</th>
+                            <th>횟수</th>
+                            <th>무게</th>
+                            <th>휴식</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>벤치프레스</td>
+                            <td>3</td>
+                            <td>10</td>
+                            <td>80kg</td>
+                            <td>90초</td>
+                            <td>
+                                <button class="btn btn-secondary-custom" style="padding: 0.25rem 0.75rem;">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>덤벨 플라이</td>
+                            <td>3</td>
+                            <td>12</td>
+                            <td>20kg</td>
+                            <td>60초</td>
+                            <td>
+                                <button class="btn btn-secondary-custom" style="padding: 0.25rem 0.75rem;">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="text-end mt-4">
+                <button class="btn btn-secondary-custom me-2">취소</button>
+                <button class="btn btn-primary-custom">저장</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 루틴 실행 -->
+    <div class="prototype-container" id="routine-execute-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">대시보드</a>
+                <a href="#" class="prototype-nav-item">루틴 관리</a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-play-circle"></i> 상체 루틴
+                </h2>
+                <div class="text-end">
+                    <div class="text-muted">운동 시간</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">25:30</div>
+                </div>
+            </div>
+            
+            <div class="exercise-card">
+                <div class="exercise-title">벤치프레스</div>
+                <div class="row text-center mb-4">
+                    <div class="col-4">
+                        <div class="text-muted">목표 세트</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">3</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted">목표 횟수</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">10</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-muted">목표 무게</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">80kg</div>
+                    </div>
+                </div>
+                
+                <div class="set-card">
+                    <h5 class="mb-3">세트 1</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">무게 (kg)</label>
+                            <input type="number" class="form-control form-control-custom" value="80">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">횟수</label>
+                            <input type="number" class="form-control form-control-custom" value="10">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">완료</label>
+                            <div class="form-check form-switch" style="padding-top: 0.5rem;">
+                                <input class="form-check-input" type="checkbox" checked style="width: 3rem; height: 1.5rem;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="set-card">
+                    <h5 class="mb-3">세트 2</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">무게 (kg)</label>
+                            <input type="number" class="form-control form-control-custom" value="80">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">횟수</label>
+                            <input type="number" class="form-control form-control-custom" value="10">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">완료</label>
+                            <div class="form-check form-switch" style="padding-top: 0.5rem;">
+                                <input class="form-check-input" type="checkbox" style="width: 3rem; height: 1.5rem;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary-custom me-2">
+                        <i class="bi bi-arrow-right-circle"></i> 다음 운동
+                    </button>
+                    <button class="btn btn-secondary-custom">
+                        <i class="bi bi-check-circle"></i> 운동 완료
+                    </button>
+                </div>
+            </div>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">운동 진행 상황</h3>
+                <div class="d-flex gap-2 flex-wrap">
+                    <span class="badge badge-custom badge-success">
+                        <i class="bi bi-check-circle"></i> 벤치프레스 완료
+                    </span>
+                    <span class="badge badge-custom badge-primary">
+                        <i class="bi bi-play-circle"></i> 덤벨 플라이 진행중
+                    </span>
+                    <span class="badge badge-custom" style="background: var(--gray-300); color: var(--gray-700);">
+                        <i class="bi bi-clock"></i> 랫 풀다운 대기
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 운동 기록 -->
+    <div class="prototype-container" id="workout-history-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-list-check"></i>
+                    <span>루틴 관리</span>
+                </a>
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>운동 기록</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-graph-up"></i>
+                    <span>통계</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-clock-history"></i> 운동 기록
+                </h2>
+                <div class="d-flex gap-2">
+                    <input type="date" class="form-control form-control-custom" style="width: auto;">
+                    <select class="form-control form-control-custom" style="width: auto;">
+                        <option>전체 루틴</option>
+                        <option>상체 루틴</option>
+                        <option>하체 루틴</option>
+                    </select>
+                    <button class="btn btn-primary-custom">
+                        <i class="bi bi-search"></i> 검색
+                    </button>
+                </div>
+            </div>
+            
+            <div class="prototype-card">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>루틴</th>
+                            <th>운동 시간</th>
+                            <th>운동 종목</th>
+                            <th>상세보기</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2026-01-15</td>
+                            <td>상체 루틴</td>
+                            <td>45분</td>
+                            <td>5개</td>
+                            <td>
+                                <button class="btn btn-primary-custom" style="padding: 0.25rem 0.75rem;">
+                                    <i class="bi bi-eye"></i> 보기
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2026-01-14</td>
+                            <td>하체 루틴</td>
+                            <td>50분</td>
+                            <td>4개</td>
+                            <td>
+                                <button class="btn btn-primary-custom" style="padding: 0.25rem 0.75rem;">
+                                    <i class="bi bi-eye"></i> 보기
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 통계 -->
+    <div class="prototype-container" id="statistics-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>운동 기록</span>
+                </a>
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-graph-up"></i>
+                    <span>통계</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-graph-up-arrow"></i> 통계 및 차트
+                </h2>
+                <div class="d-flex gap-2">
+                    <select class="form-control form-control-custom" style="width: auto;">
+                        <option>이번 주</option>
+                        <option>이번 달</option>
+                        <option>이번 년</option>
+                    </select>
+                    <button class="btn btn-primary-custom">
+                        <i class="bi bi-search"></i> 조회
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="prototype-card">
+                        <h3 class="card-title">운동 빈도</h3>
+                        <div class="chart-container">
+                            <div class="text-muted">
+                                <i class="bi bi-bar-chart" style="font-size: 3rem;"></i><br>
+                                운동 빈도 차트 영역
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="prototype-card">
+                        <h3 class="card-title">무게 증가 추이</h3>
+                        <div class="chart-container">
+                            <div class="text-muted">
+                                <i class="bi bi-graph-up" style="font-size: 3rem;"></i><br>
+                                무게 증가 추이 차트 영역
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">운동 종목별 통계</h3>
+                <div class="chart-container">
+                    <div class="text-muted">
+                        <i class="bi bi-pie-chart" style="font-size: 3rem;"></i><br>
+                        운동 종목별 통계 차트 영역
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 목표 관리 -->
+    <div class="prototype-container" id="goals-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-bullseye"></i>
+                    <span>목표</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-bullseye"></i> 나의 목표
+                </h2>
+                <button class="btn btn-primary-custom">
+                    <i class="bi bi-plus-circle"></i> 새 목표 설정
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="goal-card">
+                        <div class="goal-title">체중 감량</div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>목표: 70kg</span>
+                                <span>현재: 75kg</span>
+                            </div>
+                            <div class="progress-custom">
+                                <div class="progress-bar-custom" style="width: 50%;">50%</div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary-custom flex-fill">
+                                <i class="bi bi-pencil"></i> 수정
+                            </button>
+                            <button class="btn btn-secondary-custom flex-fill">
+                                <i class="bi bi-trash"></i> 삭제
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="goal-card">
+                        <div class="goal-title">운동 빈도</div>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>목표: 주 5회</span>
+                                <span>현재: 주 3회</span>
+                            </div>
+                            <div class="progress-custom">
+                                <div class="progress-bar-custom" style="width: 60%;">60%</div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-secondary-custom flex-fill">
+                                <i class="bi bi-pencil"></i> 수정
+                            </button>
+                            <button class="btn btn-secondary-custom flex-fill">
+                                <i class="bi bi-trash"></i> 삭제
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 운동 일지 -->
+    <div class="prototype-container" id="journal-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-journal-text"></i>
+                    <span>일지</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-journal-text"></i> 운동 일지
+                </h2>
+                <button class="btn btn-primary-custom">
+                    <i class="bi bi-plus-circle"></i> 새 일지 작성
+                </button>
+            </div>
+            
+            <div class="journal-card">
+                <div class="journal-date">
+                    <i class="bi bi-calendar"></i> 2026-01-15
+                </div>
+                <div class="journal-content">
+                    오늘 상체 루틴을 완료했다. 벤치프레스에서 목표 무게를 달성해서 기분이 좋다. 
+                    다음 주에는 무게를 조금 더 올려서 도전해보자. 덤벨 플라이도 잘 진행되었고, 
+                    랫 풀다운에서도 좋은 느낌을 받았다.
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-secondary-custom" style="padding: 0.25rem 0.75rem;">
+                        <i class="bi bi-pencil"></i> 수정
+                    </button>
+                    <button class="btn btn-secondary-custom" style="padding: 0.25rem 0.75rem;">
+                        <i class="bi bi-trash"></i> 삭제
+                    </button>
+                </div>
+            </div>
+            
+            <div class="journal-card">
+                <div class="journal-date">
+                    <i class="bi bi-calendar"></i> 2026-01-14
+                </div>
+                <div class="journal-content">
+                    하체 루틴을 완료했다. 스쿼트에서 무릎이 아팠지만 끝까지 완주했다. 
+                    데드리프트도 잘 진행되었고, 전반적으로 만족스러운 운동이었다.
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-secondary-custom" style="padding: 0.25rem 0.75rem;">
+                        <i class="bi bi-pencil"></i> 수정
+                    </button>
+                    <button class="btn btn-secondary-custom" style="padding: 0.25rem 0.75rem;">
+                        <i class="bi bi-trash"></i> 삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 프로필 -->
+    <div class="prototype-container" id="profile-page">
+        <div class="prototype-header">
+            <div class="prototype-logo">
+                <i class="bi bi-activity"></i> HaruFit
+            </div>
+            <div class="prototype-nav">
+                <a href="#" class="prototype-nav-item">
+                    <i class="bi bi-house-door"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="prototype-nav-item active">
+                    <i class="bi bi-person"></i>
+                    <span>프로필</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="prototype-content">
+            <h2 class="section-title">
+                <i class="bi bi-person-circle"></i> 프로필 정보
+            </h2>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">기본 정보</h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">이메일</label>
+                        <input type="email" class="form-control form-control-custom" value="user@example.com" disabled>
+                        <small class="text-muted">이메일은 수정할 수 없습니다.</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">닉네임</label>
+                        <input type="text" class="form-control form-control-custom" value="운동러">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prototype-card">
+                <h3 class="card-title">신체 정보</h3>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">키 (cm)</label>
+                        <input type="number" class="form-control form-control-custom" value="175">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">몸무게 (kg)</label>
+                        <input type="number" class="form-control form-control-custom" value="75">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">나이</label>
+                        <input type="number" class="form-control form-control-custom" value="30">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">성별</label>
+                        <select class="form-control form-control-custom">
+                            <option>남성</option>
+                            <option>여성</option>
+                            <option>기타</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-end mt-3">
+                    <button class="btn btn-primary-custom">
+                        <i class="bi bi-check-circle"></i> 저장
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

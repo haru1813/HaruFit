@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruFit - DB 설계도</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+        }
+        
+        .db-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 3rem;
+            max-width: 1600px;
+            margin: 2rem auto;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 4px solid var(--primary-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--primary-color);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        h4 {
+            color: var(--gray-700);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+        }
+        
+        /* ERD 다이어그램 스타일 */
+        .erd-container {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            min-height: 800px;
+            position: relative;
+        }
+        
+        .table-box {
+            position: absolute;
+            background: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-width: 250px;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px 6px 0 0;
+            font-size: 1.1rem;
+        }
+        
+        .table-body {
+            padding: 0.5rem;
+        }
+        
+        .table-field {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.9rem;
+        }
+        
+        .table-field:last-child {
+            border-bottom: none;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .field-type {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+        
+        .field-pk {
+            background: #fef3c7;
+            border-left: 3px solid var(--warning-color);
+        }
+        
+        .field-fk {
+            background: #dbeafe;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        /* 관계선 */
+        .relationship-line {
+            position: absolute;
+            border: 2px solid var(--primary-color);
+            z-index: 1;
+        }
+        
+        .relationship-label {
+            position: absolute;
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* 테이블 상세 정보 */
+        .table-detail {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .table-detail h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .detail-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .detail-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .detail-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+        
+        .pk-badge {
+            background: var(--warning-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .fk-badge {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .nn-badge {
+            background: var(--danger-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .ai-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        /* 관계 설명 */
+        .relationship-info {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .relationship-info::before {
+            content: "🔗 ";
+            font-size: 1.2rem;
+        }
+        
+        /* 범례 */
+        .legend {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* 인덱스 정보 */
+        .index-info {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .index-info::before {
+            content: "📊 ";
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="db-container">
+        <h1>
+            <i class="bi bi-diagram-3"></i> HaruFit 데이터베이스 설계도
+        </h1>
+        
+        <div class="alert alert-info">
+            <strong>데이터베이스:</strong> MySQL/MariaDB<br>
+            <strong>문자 인코딩:</strong> utf8mb4<br>
+            <strong>콜레이션:</strong> utf8mb4_unicode_ci
+        </div>
+        
+        <!-- 범례 -->
+        <div class="legend">
+            <h4 style="margin-top: 0;">범례</h4>
+            <div class="legend-item">
+                <span class="pk-badge">PK</span> Primary Key (기본 키)
+            </div>
+            <div class="legend-item">
+                <span class="fk-badge">FK</span> Foreign Key (외래 키)
+            </div>
+            <div class="legend-item">
+                <span class="nn-badge">NN</span> NOT NULL (필수)
+            </div>
+            <div class="legend-item">
+                <span class="ai-badge">AI</span> Auto Increment (자동 증가)
+            </div>
+        </div>
+        
+        <!-- ERD 다이어그램 -->
+        <div class="section">
+            <h2>1. ERD (Entity Relationship Diagram)</h2>
+            
+            <div class="erd-container" style="height: 1200px;">
+                <!-- users 테이블 -->
+                <div class="table-box" style="top: 50px; left: 50px;">
+                    <div class="table-header">users</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">user_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">email</span>
+                            <span class="field-type">VARCHAR(255) UNIQUE</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">password</span>
+                            <span class="field-type">VARCHAR(255)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">nickname</span>
+                            <span class="field-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">height</span>
+                            <span class="field-type">DECIMAL(5,2)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">weight</span>
+                            <span class="field-type">DECIMAL(5,2)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">age</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">gender</span>
+                            <span class="field-type">ENUM</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">created_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- routines 테이블 -->
+                <div class="table-box" style="top: 50px; left: 400px;">
+                    <div class="table-header">routines</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">routine_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">user_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">description</span>
+                            <span class="field-type">TEXT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">created_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">updated_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- exercises 테이블 -->
+                <div class="table-box" style="top: 50px; left: 750px;">
+                    <div class="table-header">exercises</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">exercise_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">name</span>
+                            <span class="field-type">VARCHAR(100)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">category</span>
+                            <span class="field-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">muscle_group</span>
+                            <span class="field-type">VARCHAR(50)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">description</span>
+                            <span class="field-type">TEXT</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- routine_exercises 테이블 -->
+                <div class="table-box" style="top: 400px; left: 400px;">
+                    <div class="table-header">routine_exercises</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">routine_exercise_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">routine_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">exercise_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">sets</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">reps</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">weight</span>
+                            <span class="field-type">DECIMAL(5,2)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">rest_time</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">order</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- workout_logs 테이블 -->
+                <div class="table-box" style="top: 750px; left: 50px;">
+                    <div class="table-header">workout_logs</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">log_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">user_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">routine_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">workout_date</span>
+                            <span class="field-type">DATE</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">duration</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">notes</span>
+                            <span class="field-type">TEXT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">created_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- workout_sets 테이블 -->
+                <div class="table-box" style="top: 750px; left: 400px;">
+                    <div class="table-header">workout_sets</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">set_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">log_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">exercise_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">set_number</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">weight</span>
+                            <span class="field-type">DECIMAL(5,2)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">reps</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">rest_time</span>
+                            <span class="field-type">INT</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- goals 테이블 -->
+                <div class="table-box" style="top: 750px; left: 750px;">
+                    <div class="table-header">goals</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">goal_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">user_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">goal_type</span>
+                            <span class="field-type">ENUM</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">target_value</span>
+                            <span class="field-type">DECIMAL(10,2)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">current_value</span>
+                            <span class="field-type">DECIMAL(10,2)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">deadline</span>
+                            <span class="field-type">DATE</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">status</span>
+                            <span class="field-type">ENUM</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">created_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- workout_journals 테이블 -->
+                <div class="table-box" style="top: 1100px; left: 50px;">
+                    <div class="table-header">workout_journals</div>
+                    <div class="table-body">
+                        <div class="table-field field-pk">
+                            <span class="field-name">journal_id</span>
+                            <span class="field-type">INT (PK, AI)</span>
+                        </div>
+                        <div class="table-field field-fk">
+                            <span class="field-name">user_id</span>
+                            <span class="field-type">INT (FK)</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">workout_date</span>
+                            <span class="field-type">DATE</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">content</span>
+                            <span class="field-type">TEXT</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">created_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                        <div class="table-field">
+                            <span class="field-name">updated_at</span>
+                            <span class="field-type">TIMESTAMP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 테이블 상세 정보 -->
+        <div class="section">
+            <h2>2. 테이블 상세 정보</h2>
+            
+            <!-- users 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-people"></i> users (사용자)</h4>
+                <p>시스템 사용자 정보를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> user_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>사용자 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> email</td>
+                            <td>VARCHAR(255)</td>
+                            <td>UNIQUE, NOT NULL</td>
+                            <td>이메일 주소 (로그인 ID)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> password</td>
+                            <td>VARCHAR(255)</td>
+                            <td>NOT NULL</td>
+                            <td>비밀번호 (해시화된 값)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> nickname</td>
+                            <td>VARCHAR(50)</td>
+                            <td>NOT NULL</td>
+                            <td>닉네임</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>DECIMAL(5,2)</td>
+                            <td>NULL</td>
+                            <td>키 (cm, 100-250 범위)</td>
+                        </tr>
+                        <tr>
+                            <td>weight</td>
+                            <td>DECIMAL(5,2)</td>
+                            <td>NULL</td>
+                            <td>몸무게 (kg, 30-300 범위)</td>
+                        </tr>
+                        <tr>
+                            <td>age</td>
+                            <td>INT</td>
+                            <td>NULL</td>
+                            <td>나이 (10-150 범위)</td>
+                        </tr>
+                        <tr>
+                            <td>gender</td>
+                            <td>ENUM('male', 'female', 'other')</td>
+                            <td>NULL</td>
+                            <td>성별</td>
+                        </tr>
+                        <tr>
+                            <td>created_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP</td>
+                            <td>계정 생성일시</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="index-info">
+                    <strong>인덱스:</strong> email (UNIQUE), nickname (UNIQUE)
+                </div>
+            </div>
+            
+            <!-- routines 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-list-task"></i> routines (운동 루틴)</h4>
+                <p>사용자가 생성한 운동 루틴 정보를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> routine_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>루틴 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> user_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (users.user_id), NOT NULL</td>
+                            <td>루틴 소유자 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> name</td>
+                            <td>VARCHAR(100)</td>
+                            <td>NOT NULL</td>
+                            <td>루틴 이름</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>TEXT</td>
+                            <td>NULL</td>
+                            <td>루틴 설명</td>
+                        </tr>
+                        <tr>
+                            <td>created_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP</td>
+                            <td>루틴 생성일시</td>
+                        </tr>
+                        <tr>
+                            <td>updated_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                            <td>루틴 수정일시</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="relationship-info">
+                    <strong>관계:</strong> users 테이블과 1:N 관계 (한 사용자는 여러 루틴을 가질 수 있음)
+                </div>
+            </div>
+            
+            <!-- exercises 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-activity"></i> exercises (운동 종목)</h4>
+                <p>시스템에 등록된 운동 종목 정보를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> exercise_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>운동 종목 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> name</td>
+                            <td>VARCHAR(100)</td>
+                            <td>NOT NULL, UNIQUE</td>
+                            <td>운동 종목 이름</td>
+                        </tr>
+                        <tr>
+                            <td>category</td>
+                            <td>VARCHAR(50)</td>
+                            <td>NULL</td>
+                            <td>카테고리 (예: 상체, 하체, 전신)</td>
+                        </tr>
+                        <tr>
+                            <td>muscle_group</td>
+                            <td>VARCHAR(50)</td>
+                            <td>NULL</td>
+                            <td>주요 근육군 (예: 가슴, 등, 어깨)</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>TEXT</td>
+                            <td>NULL</td>
+                            <td>운동 설명</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="index-info">
+                    <strong>인덱스:</strong> name (UNIQUE), category, muscle_group
+                </div>
+            </div>
+            
+            <!-- routine_exercises 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-link-45deg"></i> routine_exercises (루틴별 운동)</h4>
+                <p>루틴에 포함된 운동 종목과 세트/횟수 정보를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> routine_exercise_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>루틴 운동 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> routine_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (routines.routine_id), NOT NULL</td>
+                            <td>루틴 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> exercise_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (exercises.exercise_id), NOT NULL</td>
+                            <td>운동 종목 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> sets</td>
+                            <td>INT</td>
+                            <td>NOT NULL</td>
+                            <td>세트 수 (1-20)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> reps</td>
+                            <td>INT</td>
+                            <td>NOT NULL</td>
+                            <td>반복 횟수 (1-100)</td>
+                        </tr>
+                        <tr>
+                            <td>weight</td>
+                            <td>DECIMAL(5,2)</td>
+                            <td>NULL</td>
+                            <td>무게 (kg, 0-500)</td>
+                        </tr>
+                        <tr>
+                            <td>rest_time</td>
+                            <td>INT</td>
+                            <td>NULL</td>
+                            <td>휴식 시간 (초, 0-600)</td>
+                        </tr>
+                        <tr>
+                            <td>order</td>
+                            <td>INT</td>
+                            <td>DEFAULT 0</td>
+                            <td>운동 순서</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="relationship-info">
+                    <strong>관계:</strong> routines 테이블과 N:1 관계, exercises 테이블과 N:1 관계<br>
+                    <strong>복합 키:</strong> (routine_id, exercise_id) 조합은 유일해야 함
+                </div>
+            </div>
+            
+            <!-- workout_logs 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-clock-history"></i> workout_logs (운동 기록)</h4>
+                <p>사용자가 실행한 운동 기록을 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> log_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>운동 기록 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> user_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (users.user_id), NOT NULL</td>
+                            <td>사용자 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span> routine_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (routines.routine_id), NULL</td>
+                            <td>실행한 루틴 ID (NULL 가능: 자유 운동)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> workout_date</td>
+                            <td>DATE</td>
+                            <td>NOT NULL</td>
+                            <td>운동 날짜</td>
+                        </tr>
+                        <tr>
+                            <td>duration</td>
+                            <td>INT</td>
+                            <td>NULL</td>
+                            <td>운동 시간 (분)</td>
+                        </tr>
+                        <tr>
+                            <td>notes</td>
+                            <td>TEXT</td>
+                            <td>NULL</td>
+                            <td>메모</td>
+                        </tr>
+                        <tr>
+                            <td>created_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP</td>
+                            <td>기록 생성일시</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="relationship-info">
+                    <strong>관계:</strong> users 테이블과 N:1 관계, routines 테이블과 N:1 관계 (선택적)
+                </div>
+                <div class="index-info">
+                    <strong>인덱스:</strong> user_id, workout_date, (user_id, workout_date) 복합 인덱스
+                </div>
+            </div>
+            
+            <!-- workout_sets 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-list-ol"></i> workout_sets (세트별 기록)</h4>
+                <p>운동 기록의 세트별 상세 정보를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> set_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>세트 기록 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> log_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (workout_logs.log_id), NOT NULL</td>
+                            <td>운동 기록 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> exercise_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (exercises.exercise_id), NOT NULL</td>
+                            <td>운동 종목 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> set_number</td>
+                            <td>INT</td>
+                            <td>NOT NULL</td>
+                            <td>세트 번호</td>
+                        </tr>
+                        <tr>
+                            <td>weight</td>
+                            <td>DECIMAL(5,2)</td>
+                            <td>NULL</td>
+                            <td>실제 무게 (kg)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> reps</td>
+                            <td>INT</td>
+                            <td>NOT NULL</td>
+                            <td>실제 반복 횟수</td>
+                        </tr>
+                        <tr>
+                            <td>rest_time</td>
+                            <td>INT</td>
+                            <td>NULL</td>
+                            <td>실제 휴식 시간 (초)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="relationship-info">
+                    <strong>관계:</strong> workout_logs 테이블과 N:1 관계, exercises 테이블과 N:1 관계<br>
+                    <strong>복합 키:</strong> (log_id, exercise_id, set_number) 조합은 유일해야 함
+                </div>
+            </div>
+            
+            <!-- goals 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-bullseye"></i> goals (목표)</h4>
+                <p>사용자가 설정한 운동 목표를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> goal_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>목표 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> user_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (users.user_id), NOT NULL</td>
+                            <td>사용자 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> goal_type</td>
+                            <td>ENUM('weight', 'muscle', 'frequency', 'duration', 'other')</td>
+                            <td>NOT NULL</td>
+                            <td>목표 유형</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> target_value</td>
+                            <td>DECIMAL(10,2)</td>
+                            <td>NOT NULL</td>
+                            <td>목표 값</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> current_value</td>
+                            <td>DECIMAL(10,2)</td>
+                            <td>NOT NULL</td>
+                            <td>현재 값</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> deadline</td>
+                            <td>DATE</td>
+                            <td>NOT NULL</td>
+                            <td>목표 달성 기한</td>
+                        </tr>
+                        <tr>
+                            <td>status</td>
+                            <td>ENUM('active', 'completed', 'cancelled')</td>
+                            <td>DEFAULT 'active'</td>
+                            <td>목표 상태</td>
+                        </tr>
+                        <tr>
+                            <td>created_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP</td>
+                            <td>목표 설정일시</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="relationship-info">
+                    <strong>관계:</strong> users 테이블과 N:1 관계
+                </div>
+                <div class="index-info">
+                    <strong>인덱스:</strong> user_id, status, (user_id, status) 복합 인덱스
+                </div>
+            </div>
+            
+            <!-- workout_journals 테이블 -->
+            <div class="table-detail">
+                <h4><i class="bi bi-journal-text"></i> workout_journals (운동 일지)</h4>
+                <p>사용자가 작성한 운동 일지를 저장하는 테이블입니다.</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>컬럼명</th>
+                            <th>데이터 타입</th>
+                            <th>제약조건</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="pk-badge">PK</span><span class="ai-badge">AI</span> journal_id</td>
+                            <td>INT</td>
+                            <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                            <td>일지 고유 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="fk-badge">FK</span><span class="nn-badge">NN</span> user_id</td>
+                            <td>INT</td>
+                            <td>FOREIGN KEY (users.user_id), NOT NULL</td>
+                            <td>사용자 ID</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> workout_date</td>
+                            <td>DATE</td>
+                            <td>NOT NULL</td>
+                            <td>일지 작성 날짜</td>
+                        </tr>
+                        <tr>
+                            <td><span class="nn-badge">NN</span> content</td>
+                            <td>TEXT</td>
+                            <td>NOT NULL</td>
+                            <td>일지 내용</td>
+                        </tr>
+                        <tr>
+                            <td>created_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP</td>
+                            <td>일지 작성일시</td>
+                        </tr>
+                        <tr>
+                            <td>updated_at</td>
+                            <td>TIMESTAMP</td>
+                            <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                            <td>일지 수정일시</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="relationship-info">
+                    <strong>관계:</strong> users 테이블과 N:1 관계<br>
+                    <strong>제약조건:</strong> (user_id, workout_date) 조합은 유일해야 함 (하루에 하나의 일지)
+                </div>
+                <div class="index-info">
+                    <strong>인덱스:</strong> user_id, workout_date, (user_id, workout_date) UNIQUE 복합 인덱스
+                </div>
+            </div>
+        </div>
+        
+        <!-- 관계 요약 -->
+        <div class="section">
+            <h2>3. 테이블 관계 요약</h2>
+            
+            <div class="relationship-info">
+                <strong>users → routines:</strong> 1:N (한 사용자는 여러 루틴을 가질 수 있음)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>routines → routine_exercises:</strong> 1:N (한 루틴은 여러 운동을 포함)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>exercises → routine_exercises:</strong> 1:N (한 운동은 여러 루틴에 포함될 수 있음)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>users → workout_logs:</strong> 1:N (한 사용자는 여러 운동 기록을 가질 수 있음)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>routines → workout_logs:</strong> 1:N (한 루틴은 여러 번 실행될 수 있음, 선택적)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>workout_logs → workout_sets:</strong> 1:N (한 운동 기록은 여러 세트를 포함)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>exercises → workout_sets:</strong> 1:N (한 운동은 여러 세트 기록을 가질 수 있음)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>users → goals:</strong> 1:N (한 사용자는 여러 목표를 설정할 수 있음)
+            </div>
+            
+            <div class="relationship-info">
+                <strong>users → workout_journals:</strong> 1:N (한 사용자는 여러 일지를 작성할 수 있음)
+            </div>
+        </div>
+        
+        <!-- 외래 키 제약조건 -->
+        <div class="section">
+            <h2>4. 외래 키 제약조건</h2>
+            
+            <table class="detail-table">
+                <thead>
+                    <tr>
+                        <th>테이블</th>
+                        <th>컬럼</th>
+                        <th>참조 테이블</th>
+                        <th>참조 컬럼</th>
+                        <th>ON DELETE</th>
+                        <th>ON UPDATE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>routines</td>
+                        <td>user_id</td>
+                        <td>users</td>
+                        <td>user_id</td>
+                        <td>CASCADE</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>routine_exercises</td>
+                        <td>routine_id</td>
+                        <td>routines</td>
+                        <td>routine_id</td>
+                        <td>CASCADE</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>routine_exercises</td>
+                        <td>exercise_id</td>
+                        <td>exercises</td>
+                        <td>exercise_id</td>
+                        <td>RESTRICT</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>workout_logs</td>
+                        <td>user_id</td>
+                        <td>users</td>
+                        <td>user_id</td>
+                        <td>CASCADE</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>workout_logs</td>
+                        <td>routine_id</td>
+                        <td>routines</td>
+                        <td>routine_id</td>
+                        <td>SET NULL</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>workout_sets</td>
+                        <td>log_id</td>
+                        <td>workout_logs</td>
+                        <td>log_id</td>
+                        <td>CASCADE</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>workout_sets</td>
+                        <td>exercise_id</td>
+                        <td>exercises</td>
+                        <td>exercise_id</td>
+                        <td>RESTRICT</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>goals</td>
+                        <td>user_id</td>
+                        <td>users</td>
+                        <td>user_id</td>
+                        <td>CASCADE</td>
+                        <td>CASCADE</td>
+                    </tr>
+                    <tr>
+                        <td>workout_journals</td>
+                        <td>user_id</td>
+                        <td>users</td>
+                        <td>user_id</td>
+                        <td>CASCADE</td>
+                        <td>CASCADE</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 인덱스 전략 -->
+        <div class="section">
+            <h2>5. 인덱스 전략</h2>
+            
+            <h3>5.1 주요 인덱스</h3>
+            <ul>
+                <li><strong>users.email:</strong> UNIQUE 인덱스 (로그인 시 빠른 조회)</li>
+                <li><strong>users.nickname:</strong> UNIQUE 인덱스 (중복 확인)</li>
+                <li><strong>routines.user_id:</strong> 인덱스 (사용자별 루틴 조회)</li>
+                <li><strong>workout_logs.user_id, workout_date:</strong> 복합 인덱스 (날짜별 기록 조회)</li>
+                <li><strong>goals.user_id, status:</strong> 복합 인덱스 (활성 목표 조회)</li>
+                <li><strong>workout_journals.user_id, workout_date:</strong> UNIQUE 복합 인덱스 (중복 방지)</li>
+            </ul>
+            
+            <h3>5.2 인덱스 사용 가이드</h3>
+            <ul>
+                <li>WHERE 절에서 자주 사용되는 컬럼에 인덱스 생성</li>
+                <li>JOIN에 사용되는 외래 키에 인덱스 생성</li>
+                <li>ORDER BY에 자주 사용되는 컬럼에 인덱스 고려</li>
+                <li>과도한 인덱스는 INSERT/UPDATE 성능 저하를 유발할 수 있으므로 주의</li>
+            </ul>
+        </div>
+        
+        <div class="text-center mt-5 pt-4" style="border-top: 2px solid var(--gray-200);">
+            <p class="text-muted">문서 작성일: 2026년 1월</p>
+            <p class="text-muted">버전: 1.0</p>
+            <p class="text-muted">데이터베이스: MySQL/MariaDB</p>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

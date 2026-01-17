@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # MariaDB
+  mariadb:
+    image: mariadb:10.11
+    container_name: harufit_mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: harufit
+      MYSQL_USER: harufit
+      MYSQL_PASSWORD: harufit123
+      TZ: Asia/Seoul
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - harufit_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Backend
+  springboot:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: harufit_springboot
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/harufit
+      SPRING_DATASOURCE_USERNAME: harufit
+      SPRING_DATASOURCE_PASSWORD: harufit123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      TZ: Asia/Seoul
+    ports:
+      - "8081:8080"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - harufit_network
+    restart: unless-stopped
+
+  # React Frontend
+  react:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: harufit_react
+    environment:
+      # REACT_APP_API_URL은 제거 - 런타임에 호스트 기반으로 자동 감지
+      WDS_SOCKET_HOST: localhost
+      WDS_SOCKET_PORT: 3001
+      WDS_SOCKET_PATH: /ws
+      CHOKIDAR_USEPOLLING: "true"
+      FAST_REFRESH: "true"
+      HOST: "0.0.0.0"
+      DANGEROUSLY_DISABLE_HOST_CHECK: "true"
+      TZ: Asia/Seoul
+    ports:
+      - "3001:3000"
+    depends_on:
+      - springboot
+    networks:
+      - harufit_network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+networks:
+  harufit_network:
+    driver: bridge
+
+volumes:
+  mariadb_data:

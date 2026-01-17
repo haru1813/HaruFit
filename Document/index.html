@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruFit - 문서 인덱스</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--gray-800);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .index-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .header-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .header-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .doc-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .doc-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+        
+        .doc-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .doc-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .doc-description {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .doc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .doc-link:hover {
+            color: var(--primary-dark);
+            gap: 0.75rem;
+        }
+        
+        .doc-link i {
+            transition: transform 0.2s;
+        }
+        
+        .doc-link:hover i {
+            transform: translateX(4px);
+        }
+        
+        .category-section {
+            margin-bottom: 3rem;
+        }
+        
+        .category-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .footer-section {
+            text-align: center;
+            color: white;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .footer-section p {
+            opacity: 0.8;
+            margin: 0;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #059669 0%, var(--success-color) 100%);
+        }
+        
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .download-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .download-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .download-section p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+        
+        .loading-spinner {
+            display: none;
+            color: white;
+            margin-top: 1rem;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0;
+            }
+            
+            .header-section h1 {
+                font-size: 2rem;
+            }
+            
+            .header-section p {
+                font-size: 1rem;
+            }
+            
+            .doc-card {
+                padding: 1.5rem;
+            }
+            
+            .doc-icon {
+                font-size: 2.5rem;
+            }
+            
+            .doc-title {
+                font-size: 1.25rem;
+            }
+            
+            .category-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-section h1 {
+                font-size: 1.75rem;
+            }
+            
+            .doc-card {
+                padding: 1rem;
+            }
+            
+            .doc-icon {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="index-container">
+        <div class="header-section">
+            <h1>
+                <i class="bi bi-activity"></i> HaruFit
+            </h1>
+            <p>프로젝트 문서 인덱스</p>
+        </div>
+        
+        <!-- PDF 다운로드 섹션 -->
+        <div class="download-section">
+            <h3>
+                <i class="bi bi-file-earmark-pdf"></i> 전체 문서 PDF 다운로드
+            </h3>
+            <p>모든 기획 및 설계 문서를 하나의 PDF 파일로 다운로드할 수 있습니다.</p>
+            <button id="downloadPdfBtn" class="download-btn" onclick="downloadAllDocumentsAsPdf()">
+                <i class="bi bi-download"></i> PDF 다운로드
+            </button>
+            <div id="loadingSpinner" class="loading-spinner">
+                <i class="bi bi-arrow-repeat spin"></i> PDF 생성 중...
+            </div>
+        </div>
+        
+        <!-- 기획 및 설계 문서 -->
+        <div class="category-section">
+            <h2 class="category-title">
+                <i class="bi bi-folder-fill"></i> 기획 및 설계 문서
+            </h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div class="doc-title">요구사항 명세서</div>
+                        <div class="doc-description">
+                            프로젝트의 전체 요구사항을 정의한 문서입니다. 기능적 요구사항과 비기능적 요구사항을 포함합니다.
+                        </div>
+                        <a href="요구사항 명세서.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <div class="doc-title">유스케이스 다이어그램</div>
+                        <div class="doc-description">
+                            시스템의 주요 기능과 사용자 상호작용을 시각적으로 표현한 다이어그램입니다.
+                        </div>
+                        <a href="유스케이스 다이어그램.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <div class="doc-title">비지니스 로직 정의서</div>
+                        <div class="doc-description">
+                            각 모듈별 비지니스 로직, 처리 흐름, 검증 규칙, 예외 처리를 상세히 정의한 문서입니다.
+                        </div>
+                        <a href="비지니스 로직 정의서.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 디자인 문서 -->
+        <div class="category-section">
+            <h2 class="category-title">
+                <i class="bi bi-palette"></i> 디자인 문서
+            </h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-layout-text-window"></i>
+                        </div>
+                        <div class="doc-title">와이어프레임</div>
+                        <div class="doc-description">
+                            화면 레이아웃과 구조를 보여주는 저정밀도 목업입니다. 화면 구성 요소와 레이아웃에 집중합니다.
+                        </div>
+                        <a href="와이어프레임.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-paint-bucket"></i>
+                        </div>
+                        <div class="doc-title">프로토타입</div>
+                        <div class="doc-description">
+                            실제 디자인 요소를 적용한 고정밀도 목업입니다. 최종 화면과 유사한 모습을 보여줍니다.
+                        </div>
+                        <a href="프로토타입.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-palette-fill"></i>
+                        </div>
+                        <div class="doc-title">디자인 가이드라인</div>
+                        <div class="doc-description">
+                            브랜드 아이덴티티, 컬러 시스템, 타이포그래피, 아이콘, 컴포넌트 사용 가이드를 정의합니다.
+                        </div>
+                        <a href="디자인 가이드라인.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 기술 문서 -->
+        <div class="category-section">
+            <h2 class="category-title">
+                <i class="bi bi-code-slash"></i> 기술 문서
+            </h2>
+            <div class="row g-3">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-database"></i>
+                        </div>
+                        <div class="doc-title">DB 설계도</div>
+                        <div class="doc-description">
+                            데이터베이스 ERD와 테이블 스키마를 상세히 정의한 문서입니다. 컬럼, 데이터 타입, 제약 조건을 포함합니다.
+                        </div>
+                        <a href="DB 설계도.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                        </div>
+                        <div class="doc-title">API 명세서</div>
+                        <div class="doc-description">
+                            RESTful API 엔드포인트를 정의한 문서입니다. HTTP 메서드, URL, 요청/응답 예시를 포함합니다.
+                        </div>
+                        <a href="API 명세서.html" class="doc-link">
+                            문서 보기 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-section">
+            <p>© 2026 HaruFit. All rights reserved.</p>
+        </div>
+    </div>
+    
+    <script>
+        // PDF 다운로드 기능
+        async function downloadAllDocumentsAsPdf() {
+            const btn = document.getElementById('downloadPdfBtn');
+            const spinner = document.getElementById('loadingSpinner');
+            
+            // 버튼 비활성화 및 로딩 표시
+            btn.disabled = true;
+            spinner.classList.add('active');
+            
+            try {
+                // 문서 목록 (실제 존재하는 문서들)
+                const documents = [
+                    { name: '유스케이스 다이어그램', file: '유스케이스 다이어그램.html' },
+                    { name: '비지니스 로직 정의서', file: '비지니스 로직 정의서.html' },
+                    { name: '와이어프레임', file: '와이어프레임.html' },
+                    { name: '프로토타입', file: '프로토타입.html' },
+                    { name: '디자인 가이드라인', file: '디자인 가이드라인.html' },
+                    { name: 'DB 설계도', file: 'DB 설계도.html' },
+                    { name: 'API 명세서', file: 'API 명세서.html' }
+                ];
+                
+                // PDF 옵션 설정
+                const pdfOptions = {
+                    margin: [10, 10, 10, 10],
+                    filename: 'HaruFit_전체문서.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2,
+                        useCORS: true,
+                        logging: false
+                    },
+                    jsPDF: { 
+                        unit: 'mm', 
+                        format: 'a4', 
+                        orientation: 'portrait' 
+                    }
+                };
+                
+                // 모든 문서를 로드하고 합치기
+                const allContent = [];
+                
+                for (let i = 0; i < documents.length; i++) {
+                    const doc = documents[i];
+                    try {
+                        const response = await fetch(doc.file);
+                        if (!response.ok) {
+                            console.warn(`문서를 로드할 수 없습니다: ${doc.file}`);
+                            continue;
+                        }
+                        const html = await response.text();
+                        
+                        // HTML 파싱하여 본문 내용만 추출
+                        const parser = new DOMParser();
+                        const docElement = parser.parseFromString(html, 'text/html');
+                        
+                        // 스타일과 스크립트 포함
+                        const styles = Array.from(docElement.querySelectorAll('style, link[rel="stylesheet"]'));
+                        const scripts = Array.from(docElement.querySelectorAll('script[src]'));
+                        
+                        // 본문 내용 추출
+                        const bodyContent = docElement.body || docElement.documentElement;
+                        
+                        // 제목 추가
+                        const titleDiv = document.createElement('div');
+                        titleDiv.style.cssText = 'page-break-before: always; padding: 20px; background: #6366f1; color: white; margin-bottom: 20px;';
+                        titleDiv.innerHTML = `<h1 style="margin: 0; font-size: 24px;">${doc.name}</h1>`;
+                        
+                        allContent.push({
+                            title: titleDiv.outerHTML,
+                            content: bodyContent.innerHTML,
+                            styles: styles.map(s => s.outerHTML).join(''),
+                            scripts: scripts.map(s => s.outerHTML).join('')
+                        });
+                    } catch (error) {
+                        console.error(`문서 로드 오류 (${doc.file}):`, error);
+                    }
+                }
+                
+                if (allContent.length === 0) {
+                    alert('다운로드할 문서를 찾을 수 없습니다.');
+                    return;
+                }
+                
+                // 모든 내용을 하나의 HTML로 합치기
+                const combinedHTML = `
+                    <!DOCTYPE html>
+                    <html lang="ko">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>HaruFit 전체 문서</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+                        ${allContent.map(c => c.styles).join('')}
+                        <style>
+                            body {
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                padding: 20px;
+                                background: white;
+                            }
+                            @media print {
+                                .page-break {
+                                    page-break-before: always;
+                                }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border-radius: 8px;">
+                            <h1 style="margin: 0; font-size: 32px;">
+                                <i class="bi bi-activity"></i> HaruFit
+                            </h1>
+                            <p style="margin: 10px 0 0 0; font-size: 18px;">프로젝트 전체 문서</p>
+                            <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">생성일: ${new Date().toLocaleDateString('ko-KR')}</p>
+                        </div>
+                        ${allContent.map((c, index) => `
+                            <div class="${index > 0 ? 'page-break' : ''}">
+                                ${c.title}
+                                ${c.content}
+                            </div>
+                        `).join('')}
+                        ${allContent.map(c => c.scripts).join('')}
+                    </body>
+                    </html>
+                `;
+                
+                // 임시 div 생성하여 PDF로 변환
+                const tempDiv = document.createElement('div');
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.width = '210mm'; // A4 너비
+                tempDiv.innerHTML = combinedHTML;
+                document.body.appendChild(tempDiv);
+                
+                // PDF 생성
+                await html2pdf().set(pdfOptions).from(tempDiv).save();
+                
+                // 임시 div 제거
+                document.body.removeChild(tempDiv);
+                
+                alert('PDF 다운로드가 완료되었습니다!');
+            } catch (error) {
+                console.error('PDF 생성 오류:', error);
+                alert('PDF 생성 중 오류가 발생했습니다: ' + error.message);
+            } finally {
+                // 버튼 활성화 및 로딩 숨김
+                btn.disabled = false;
+                spinner.classList.remove('active');
+            }
+        }
+        
+        // 스핀 애니메이션
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .spin {
+                animation: spin 1s linear infinite;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

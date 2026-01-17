@@ -1,0 +1,117 @@
+.workouts-page {
+  padding: 1rem 0;
+}
+
+.workouts-page h1 {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.workout-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  margin-bottom: 1rem;
+}
+
+.workout-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.workout-date {
+  color: var(--gray-500);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.workout-title {
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.workout-exercises {
+  margin-bottom: 1rem;
+}
+
+.exercise-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--gray-50);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.exercise-name {
+  font-weight: 500;
+  color: var(--gray-800);
+}
+
+.exercise-sets {
+  color: var(--gray-600);
+  font-size: 0.9rem;
+}
+
+.workout-summary {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+.summary-item {
+  flex: 1;
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  margin-bottom: 0.25rem;
+}
+
+.summary-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .workouts-page h1 {
+    font-size: 1.5rem;
+  }
+
+  .workout-card {
+    padding: 1rem;
+  }
+
+  .workout-summary {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .workouts-page h1 {
+    font-size: 1.25rem;
+  }
+
+  .exercise-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

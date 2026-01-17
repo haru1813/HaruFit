@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruFit - 와이어프레임</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            padding: 2rem 0;
+        }
+        .wireframe-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #6366f1;
+            border-bottom: 3px solid #6366f1;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        h2 {
+            color: #4f46e5;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid #6366f1;
+        }
+        h3 {
+            color: #6366f1;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        /* 와이어프레임 프레임 스타일 */
+        .wireframe-frame {
+            border: 3px solid #6366f1;
+            border-radius: 8px;
+            background: #ffffff;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .wireframe-frame::before {
+            content: attr(data-page-name);
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #6366f1;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        /* 헤더/네비게이션 */
+        .wireframe-header {
+            background: #f3f4f6;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wireframe-logo {
+            background: #e5e7eb;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #6366f1;
+        }
+        .wireframe-nav {
+            display: flex;
+            gap: 1rem;
+        }
+        .wireframe-nav-item {
+            background: #e5e7eb;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: 1px dashed #9ca3af;
+        }
+        
+        /* 컨텐츠 영역 */
+        .wireframe-content {
+            border: 2px dashed #d1d5db;
+            border-radius: 4px;
+            padding: 1.5rem;
+            min-height: 400px;
+            background: #fafafa;
+        }
+        
+        /* 카드/박스 스타일 */
+        .wireframe-box {
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .wireframe-box-title {
+            font-weight: bold;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+        .wireframe-box-content {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        /* 폼 요소 */
+        .wireframe-form-group {
+            margin-bottom: 1rem;
+        }
+        .wireframe-label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .wireframe-input {
+            width: 100%;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            padding: 0.5rem;
+            background: #f9fafb;
+        }
+        .wireframe-textarea {
+            width: 100%;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            padding: 0.5rem;
+            background: #f9fafb;
+            min-height: 100px;
+        }
+        .wireframe-button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            margin: 0.25rem;
+        }
+        .wireframe-button-secondary {
+            background: #6b7280;
+        }
+        
+        /* 테이블 스타일 */
+        .wireframe-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px dashed #9ca3af;
+        }
+        .wireframe-table th {
+            background: #f3f4f6;
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #d1d5db;
+        }
+        .wireframe-table td {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+        }
+        
+        /* 그리드 레이아웃 */
+        .wireframe-grid {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .wireframe-grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .wireframe-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .wireframe-grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        /* 차트 영역 */
+        .wireframe-chart {
+            background: #f9fafb;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            padding: 2rem;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+        }
+        
+        /* 사이드바 */
+        .wireframe-sidebar {
+            background: #f3f4f6;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            padding: 1rem;
+            min-height: 400px;
+        }
+        
+        /* 푸터 */
+        .wireframe-footer {
+            background: #f3f4f6;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+            color: #6b7280;
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .wireframe-container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.25rem;
+            }
+            
+            .wireframe-grid-2,
+            .wireframe-grid-3,
+            .wireframe-grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .wireframe-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0.75rem;
+            }
+            
+            .wireframe-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .wireframe-nav-item {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.75rem;
+            }
+            
+            .wireframe-content {
+                padding: 1rem;
+            }
+            
+            .wireframe-box {
+                padding: 0.75rem;
+            }
+            
+            .wireframe-frame {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .wireframe-container {
+                padding: 0.5rem;
+            }
+            
+            h1 {
+                font-size: 1.25rem;
+            }
+            
+            .wireframe-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .wireframe-nav-item {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        /* 설명 텍스트 */
+        .wireframe-note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="wireframe-container">
+        <h1>HaruFit - 와이어프레임</h1>
+        
+        <div class="alert alert-info">
+            <strong>와이어프레임 설명:</strong> 이 문서는 HaruFit 웹 애플리케이션의 주요 화면 레이아웃과 구조를 보여줍니다. 
+            실제 디자인보다는 화면 구성 요소와 레이아웃에 집중합니다.
+        </div>
+        
+        <!-- 1. 로그인 화면 -->
+        <h2>1. 인증 화면</h2>
+        
+        <div class="wireframe-frame" data-page-name="로그인 화면">
+            <div class="wireframe-content text-center">
+                <div class="wireframe-box" style="max-width: 400px; margin: 2rem auto;">
+                    <div class="wireframe-box-title">로그인</div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">이메일</label>
+                        <div class="wireframe-input">이메일 입력 필드</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">비밀번호</label>
+                        <div class="wireframe-input">비밀번호 입력 필드</div>
+                    </div>
+                    <button class="wireframe-button" style="width: 100%;">로그인</button>
+                    <div style="margin-top: 1rem; color: #6b7280;">
+                        계정이 없으신가요? <a href="#" style="color: #6366f1;">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wireframe-frame" data-page-name="회원가입 화면">
+            <div class="wireframe-content text-center">
+                <div class="wireframe-box" style="max-width: 400px; margin: 2rem auto;">
+                    <div class="wireframe-box-title">회원가입</div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">이메일</label>
+                        <div class="wireframe-input">이메일 입력 필드</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">비밀번호</label>
+                        <div class="wireframe-input">비밀번호 입력 필드</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">비밀번호 확인</label>
+                        <div class="wireframe-input">비밀번호 확인 입력 필드</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">닉네임</label>
+                        <div class="wireframe-input">닉네임 입력 필드</div>
+                    </div>
+                    <button class="wireframe-button" style="width: 100%;">회원가입</button>
+                    <div style="margin-top: 1rem; color: #6b7280;">
+                        이미 계정이 있으신가요? <a href="#" style="color: #6366f1;">로그인</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. 메인 대시보드 -->
+        <h2>2. 메인 대시보드</h2>
+        
+        <div class="wireframe-frame" data-page-name="대시보드">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">루틴 관리</div>
+                    <div class="wireframe-nav-item">운동 기록</div>
+                    <div class="wireframe-nav-item">목표</div>
+                    <div class="wireframe-nav-item">일지</div>
+                    <div class="wireframe-nav-item">프로필</div>
+                    <div class="wireframe-nav-item">로그아웃</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <h3 style="margin-top: 0;">오늘의 운동</h3>
+                <div class="wireframe-grid wireframe-grid-3">
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">최근 루틴 1</div>
+                        <div class="wireframe-box-content">
+                            루틴 이름<br>
+                            운동 종목 수: 5개<br>
+                            <button class="wireframe-button" style="margin-top: 0.5rem;">시작하기</button>
+                        </div>
+                    </div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">최근 루틴 2</div>
+                        <div class="wireframe-box-content">
+                            루틴 이름<br>
+                            운동 종목 수: 3개<br>
+                            <button class="wireframe-button" style="margin-top: 0.5rem;">시작하기</button>
+                        </div>
+                    </div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">새 루틴 만들기</div>
+                        <div class="wireframe-box-content">
+                            새로운 운동 루틴을<br>
+                            만들어보세요<br>
+                            <button class="wireframe-button" style="margin-top: 0.5rem;">만들기</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>이번 주 통계</h3>
+                <div class="wireframe-grid wireframe-grid-4">
+                    <div class="wireframe-box text-center">
+                        <div class="wireframe-box-title">운동 횟수</div>
+                        <div style="font-size: 2rem; color: #6366f1; font-weight: bold;">5회</div>
+                    </div>
+                    <div class="wireframe-box text-center">
+                        <div class="wireframe-box-title">총 운동 시간</div>
+                        <div style="font-size: 2rem; color: #6366f1; font-weight: bold;">12시간</div>
+                    </div>
+                    <div class="wireframe-box text-center">
+                        <div class="wireframe-box-title">목표 진행률</div>
+                        <div style="font-size: 2rem; color: #6366f1; font-weight: bold;">75%</div>
+                    </div>
+                    <div class="wireframe-box text-center">
+                        <div class="wireframe-box-title">연속 운동일</div>
+                        <div style="font-size: 2rem; color: #6366f1; font-weight: bold;">7일</div>
+                    </div>
+                </div>
+                
+                <h3>최근 운동 기록</h3>
+                <div class="wireframe-box">
+                    <table class="wireframe-table">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>루틴</th>
+                                <th>운동 시간</th>
+                                <th>상세보기</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-01-15</td>
+                                <td>상체 루틴</td>
+                                <td>45분</td>
+                                <td><button class="wireframe-button" style="padding: 0.25rem 0.75rem;">보기</button></td>
+                            </tr>
+                            <tr>
+                                <td>2026-01-14</td>
+                                <td>하체 루틴</td>
+                                <td>50분</td>
+                                <td><button class="wireframe-button" style="padding: 0.25rem 0.75rem;">보기</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="wireframe-footer">
+                © 2026 HaruFit. All rights reserved.
+            </div>
+        </div>
+        
+        <!-- 3. 루틴 관리 -->
+        <h2>3. 운동 루틴 관리</h2>
+        
+        <div class="wireframe-frame" data-page-name="루틴 목록">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">루틴 관리</div>
+                    <div class="wireframe-nav-item">운동 기록</div>
+                    <div class="wireframe-nav-item">목표</div>
+                    <div class="wireframe-nav-item">일지</div>
+                    <div class="wireframe-nav-item">프로필</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">나의 루틴</h3>
+                    <button class="wireframe-button">+ 새 루틴 만들기</button>
+                </div>
+                
+                <div class="wireframe-grid wireframe-grid-3">
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">상체 루틴</div>
+                        <div class="wireframe-box-content">
+                            운동 종목: 5개<br>
+                            예상 시간: 45분<br>
+                            마지막 실행: 2026-01-15<br>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="wireframe-button" style="padding: 0.25rem 0.75rem;">시작</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">하체 루틴</div>
+                        <div class="wireframe-box-content">
+                            운동 종목: 4개<br>
+                            예상 시간: 40분<br>
+                            마지막 실행: 2026-01-14<br>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="wireframe-button" style="padding: 0.25rem 0.75rem;">시작</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">전신 루틴</div>
+                        <div class="wireframe-box-content">
+                            운동 종목: 6개<br>
+                            예상 시간: 60분<br>
+                            마지막 실행: 2026-01-13<br>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="wireframe-button" style="padding: 0.25rem 0.75rem;">시작</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wireframe-frame" data-page-name="루틴 생성/수정">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">루틴 관리</div>
+                    <div class="wireframe-nav-item">운동 기록</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <h3>루틴 정보</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">루틴 이름</label>
+                        <div class="wireframe-input">루틴 이름 입력</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">설명</label>
+                        <div class="wireframe-textarea">루틴 설명 입력</div>
+                    </div>
+                </div>
+                
+                <h3>운동 종목 추가</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">운동 종목 선택</label>
+                        <div class="wireframe-input">운동 종목 드롭다운</div>
+                    </div>
+                    <div class="wireframe-grid wireframe-grid-4">
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">세트</label>
+                            <div class="wireframe-input">세트 수</div>
+                        </div>
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">횟수</label>
+                            <div class="wireframe-input">반복 횟수</div>
+                        </div>
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">무게 (kg)</label>
+                            <div class="wireframe-input">무게</div>
+                        </div>
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">휴식 (초)</label>
+                            <div class="wireframe-input">휴식 시간</div>
+                        </div>
+                    </div>
+                    <button class="wireframe-button">운동 추가</button>
+                </div>
+                
+                <h3>추가된 운동 목록</h3>
+                <div class="wireframe-box">
+                    <table class="wireframe-table">
+                        <thead>
+                            <tr>
+                                <th>운동 종목</th>
+                                <th>세트</th>
+                                <th>횟수</th>
+                                <th>무게</th>
+                                <th>휴식</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>벤치프레스</td>
+                                <td>3</td>
+                                <td>10</td>
+                                <td>80kg</td>
+                                <td>90초</td>
+                                <td><button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="text-align: right; margin-top: 1rem;">
+                    <button class="wireframe-button wireframe-button-secondary">취소</button>
+                    <button class="wireframe-button">저장</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 루틴 실행 -->
+        <h2>4. 루틴 실행</h2>
+        
+        <div class="wireframe-frame" data-page-name="루틴 실행">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">루틴 관리</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">상체 루틴</h3>
+                    <div>
+                        <span style="color: #6b7280;">운동 시간: </span>
+                        <span style="font-size: 1.5rem; font-weight: bold; color: #6366f1;">25:30</span>
+                    </div>
+                </div>
+                
+                <div class="wireframe-box">
+                    <div class="wireframe-box-title">현재 운동: 벤치프레스</div>
+                    <div class="wireframe-box-content">
+                        <div style="display: flex; justify-content: space-around; margin: 1rem 0;">
+                            <div class="text-center">
+                                <div style="font-size: 0.9rem; color: #6b7280;">목표 세트</div>
+                                <div style="font-size: 2rem; font-weight: bold; color: #6366f1;">3</div>
+                            </div>
+                            <div class="text-center">
+                                <div style="font-size: 0.9rem; color: #6b7280;">목표 횟수</div>
+                                <div style="font-size: 2rem; font-weight: bold; color: #6366f1;">10</div>
+                            </div>
+                            <div class="text-center">
+                                <div style="font-size: 0.9rem; color: #6b7280;">목표 무게</div>
+                                <div style="font-size: 2rem; font-weight: bold; color: #6366f1;">80kg</div>
+                            </div>
+                        </div>
+                        
+                        <h4>세트 1</h4>
+                        <div class="wireframe-grid wireframe-grid-3">
+                            <div class="wireframe-form-group">
+                                <label class="wireframe-label">무게 (kg)</label>
+                                <div class="wireframe-input">80</div>
+                            </div>
+                            <div class="wireframe-form-group">
+                                <label class="wireframe-label">횟수</label>
+                                <div class="wireframe-input">10</div>
+                            </div>
+                            <div class="wireframe-form-group">
+                                <label class="wireframe-label">완료</label>
+                                <div style="text-align: center;">
+                                    <input type="checkbox" style="width: 30px; height: 30px;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4>세트 2</h4>
+                        <div class="wireframe-grid wireframe-grid-3">
+                            <div class="wireframe-form-group">
+                                <label class="wireframe-label">무게 (kg)</label>
+                                <div class="wireframe-input">80</div>
+                            </div>
+                            <div class="wireframe-form-group">
+                                <label class="wireframe-label">횟수</label>
+                                <div class="wireframe-input">10</div>
+                            </div>
+                            <div class="wireframe-form-group">
+                                <label class="wireframe-label">완료</label>
+                                <div style="text-align: center;">
+                                    <input type="checkbox" style="width: 30px; height: 30px;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button class="wireframe-button">다음 운동</button>
+                            <button class="wireframe-button wireframe-button-secondary">운동 완료</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="wireframe-box">
+                    <div class="wireframe-box-title">운동 진행 상황</div>
+                    <div class="wireframe-box-content">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 4px;">벤치프레스 완료</span>
+                            <span style="background: #6366f1; color: white; padding: 0.25rem 0.75rem; border-radius: 4px;">덤벨 플라이 진행중</span>
+                            <span style="background: #e5e7eb; color: #6b7280; padding: 0.25rem 0.75rem; border-radius: 4px;">랫 풀다운 대기</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. 운동 기록 -->
+        <h2>5. 운동 기록</h2>
+        
+        <div class="wireframe-frame" data-page-name="운동 기록 조회">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">루틴 관리</div>
+                    <div class="wireframe-nav-item">운동 기록</div>
+                    <div class="wireframe-nav-item">통계</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">운동 기록</h3>
+                    <div>
+                        <div class="wireframe-input" style="display: inline-block; width: auto; margin-right: 0.5rem;">날짜 선택</div>
+                        <div class="wireframe-input" style="display: inline-block; width: auto; margin-right: 0.5rem;">루틴 필터</div>
+                        <button class="wireframe-button">검색</button>
+                    </div>
+                </div>
+                
+                <div class="wireframe-box">
+                    <table class="wireframe-table">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>루틴</th>
+                                <th>운동 시간</th>
+                                <th>운동 종목</th>
+                                <th>상세보기</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-01-15</td>
+                                <td>상체 루틴</td>
+                                <td>45분</td>
+                                <td>5개</td>
+                                <td><button class="wireframe-button" style="padding: 0.25rem 0.75rem;">보기</button></td>
+                            </tr>
+                            <tr>
+                                <td>2026-01-14</td>
+                                <td>하체 루틴</td>
+                                <td>50분</td>
+                                <td>4개</td>
+                                <td><button class="wireframe-button" style="padding: 0.25rem 0.75rem;">보기</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wireframe-frame" data-page-name="운동 기록 상세">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">운동 기록</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <h3>2026-01-15 상체 루틴</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-box-title">운동 정보</div>
+                    <div class="wireframe-box-content">
+                        운동 시간: 45분<br>
+                        총 세트 수: 15세트<br>
+                        시작 시간: 10:00<br>
+                        종료 시간: 10:45
+                    </div>
+                </div>
+                
+                <h3>세트별 기록</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-box-title">벤치프레스</div>
+                    <table class="wireframe-table">
+                        <thead>
+                            <tr>
+                                <th>세트</th>
+                                <th>무게 (kg)</th>
+                                <th>횟수</th>
+                                <th>휴식 시간</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>80</td>
+                                <td>10</td>
+                                <td>90초</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>80</td>
+                                <td>10</td>
+                                <td>90초</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>80</td>
+                                <td>8</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 6. 통계 -->
+        <h2>6. 통계 및 차트</h2>
+        
+        <div class="wireframe-frame" data-page-name="통계">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">운동 기록</div>
+                    <div class="wireframe-nav-item">통계</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <div style="margin-bottom: 1rem;">
+                    <div class="wireframe-input" style="display: inline-block; width: auto; margin-right: 0.5rem;">기간 선택</div>
+                    <button class="wireframe-button">조회</button>
+                </div>
+                
+                <div class="wireframe-grid wireframe-grid-2">
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">운동 빈도</div>
+                        <div class="wireframe-chart">차트 영역 (운동 빈도 그래프)</div>
+                    </div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">무게 증가 추이</div>
+                        <div class="wireframe-chart">차트 영역 (무게 증가 추이 그래프)</div>
+                    </div>
+                </div>
+                
+                <div class="wireframe-box" style="margin-top: 1rem;">
+                    <div class="wireframe-box-title">운동 종목별 통계</div>
+                    <div class="wireframe-chart">차트 영역 (운동 종목별 통계 그래프)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 7. 목표 관리 -->
+        <h2>7. 목표 관리</h2>
+        
+        <div class="wireframe-frame" data-page-name="목표 설정">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">목표</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">나의 목표</h3>
+                    <button class="wireframe-button">+ 새 목표 설정</button>
+                </div>
+                
+                <div class="wireframe-grid wireframe-grid-2">
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">체중 감량</div>
+                        <div class="wireframe-box-content">
+                            목표: 70kg<br>
+                            현재: 75kg<br>
+                            진행률: 50%<br>
+                            <div style="background: #e5e7eb; height: 20px; border-radius: 10px; margin-top: 0.5rem;">
+                                <div style="background: #6366f1; height: 100%; width: 50%; border-radius: 10px;"></div>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wireframe-box">
+                        <div class="wireframe-box-title">운동 빈도</div>
+                        <div class="wireframe-box-content">
+                            목표: 주 5회<br>
+                            현재: 주 3회<br>
+                            진행률: 60%<br>
+                            <div style="background: #e5e7eb; height: 20px; border-radius: 10px; margin-top: 0.5rem;">
+                                <div style="background: #6366f1; height: 100%; width: 60%; border-radius: 10px;"></div>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                                <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wireframe-frame" data-page-name="목표 설정 폼">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">목표</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <h3>목표 설정</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">목표 유형</label>
+                        <div class="wireframe-input">목표 유형 선택 (체중, 근육량, 운동 빈도 등)</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">현재 값</label>
+                        <div class="wireframe-input">현재 값 입력</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">목표 값</label>
+                        <div class="wireframe-input">목표 값 입력</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">목표 기한</label>
+                        <div class="wireframe-input">목표 기한 날짜 선택</div>
+                    </div>
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <button class="wireframe-button wireframe-button-secondary">취소</button>
+                        <button class="wireframe-button">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 8. 운동 일지 -->
+        <h2>8. 운동 일지</h2>
+        
+        <div class="wireframe-frame" data-page-name="일지 목록">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">일지</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">운동 일지</h3>
+                    <button class="wireframe-button">+ 새 일지 작성</button>
+                </div>
+                
+                <div class="wireframe-box">
+                    <div class="wireframe-box-title">2026-01-15</div>
+                    <div class="wireframe-box-content">
+                        오늘 상체 루틴을 완료했다. 벤치프레스에서 목표 무게를 달성해서 기분이 좋다. 
+                        다음 주에는 무게를 조금 더 올려서 도전해보자.
+                        <div style="margin-top: 0.5rem;">
+                            <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                            <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="wireframe-box">
+                    <div class="wireframe-box-title">2026-01-14</div>
+                    <div class="wireframe-box-content">
+                        하체 루틴을 완료했다. 스쿼트에서 무릎이 아팠지만 끝까지 완주했다.
+                        <div style="margin-top: 0.5rem;">
+                            <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">수정</button>
+                            <button class="wireframe-button wireframe-button-secondary" style="padding: 0.25rem 0.75rem;">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wireframe-frame" data-page-name="일지 작성/수정">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">일지</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <h3>일지 작성</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">날짜</label>
+                        <div class="wireframe-input">날짜 선택</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">내용</label>
+                        <div class="wireframe-textarea" style="min-height: 300px;">일지 내용 입력 (텍스트 에디터)</div>
+                    </div>
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <button class="wireframe-button wireframe-button-secondary">취소</button>
+                        <button class="wireframe-button">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 9. 프로필 관리 -->
+        <h2>9. 프로필 관리</h2>
+        
+        <div class="wireframe-frame" data-page-name="프로필">
+            <div class="wireframe-header">
+                <div class="wireframe-logo">HaruFit</div>
+                <div class="wireframe-nav">
+                    <div class="wireframe-nav-item">대시보드</div>
+                    <div class="wireframe-nav-item">프로필</div>
+                </div>
+            </div>
+            
+            <div class="wireframe-content">
+                <h3>프로필 정보</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">이메일</label>
+                        <div class="wireframe-input">user@example.com (수정 불가)</div>
+                    </div>
+                    <div class="wireframe-form-group">
+                        <label class="wireframe-label">닉네임</label>
+                        <div class="wireframe-input">닉네임</div>
+                    </div>
+                </div>
+                
+                <h3>신체 정보</h3>
+                <div class="wireframe-box">
+                    <div class="wireframe-grid wireframe-grid-4">
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">키 (cm)</label>
+                            <div class="wireframe-input">175</div>
+                        </div>
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">몸무게 (kg)</label>
+                            <div class="wireframe-input">75</div>
+                        </div>
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">나이</label>
+                            <div class="wireframe-input">30</div>
+                        </div>
+                        <div class="wireframe-form-group">
+                            <label class="wireframe-label">성별</label>
+                            <div class="wireframe-input">성별 선택</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <button class="wireframe-button">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <p class="text-muted">문서 작성일: 2026년 1월</p>
+            <p class="text-muted">버전: 1.0</p>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

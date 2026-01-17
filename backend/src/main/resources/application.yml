@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: harufit
+  
+  datasource:
+    url: jdbc:mariadb://${SPRING_DATASOURCE_URL:mariadb:3306}/harufit
+    username: ${SPRING_DATASOURCE_USERNAME:harufit}
+    password: ${SPRING_DATASOURCE_PASSWORD:harufit123}
+    driver-class-name: org.mariadb.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+  
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.harufit: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: INFO

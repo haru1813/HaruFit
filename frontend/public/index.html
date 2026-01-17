@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline';">
+    <meta
+      name="description"
+      content="HaruFit - 개인 맞춤형 운동 관리 웹 애플리케이션"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <title>HaruFit - 운동 관리 플랫폼</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      // 페이지 로드 전 즉시 인증 체크
+      (function() {
+        console.log('🔍 Pre-load auth check started');
+        const protectedPaths = ['/dashboard', '/routines', '/workouts', '/goals', '/journals', '/profile'];
+        const currentPath = window.location.pathname;
+        const isProtectedPath = protectedPaths.some(path => currentPath.startsWith(path)) || currentPath === '/';
+        
+        console.log('🔍 Current path:', currentPath);
+        console.log('🔍 Is protected path:', isProtectedPath);
+        
+        if (isProtectedPath) {
+          const savedUser = localStorage.getItem('user');
+          console.log('🔍 Saved user in localStorage:', savedUser);
+          
+          if (!savedUser) {
+            console.error('🚫 No user in localStorage - Redirecting to /login NOW!');
+            window.location.replace('/login');
+            return;
+          }
+          
+          try {
+            const user = JSON.parse(savedUser);
+            if (!user || !user.user_id || !user.email || !user.nickname) {
+              console.error('🚫 Invalid user data - Redirecting to /login NOW!');
+              localStorage.removeItem('user');
+              window.location.replace('/login');
+              return;
+            }
+            console.log('✅ Valid user data found');
+          } catch (e) {
+            console.error('🚫 Error parsing user data - Redirecting to /login NOW!', e);
+            localStorage.removeItem('user');
+            window.location.replace('/login');
+            return;
+          }
+        }
+        console.log('✅ Pre-load auth check passed');
+      })();
+    </script>
+  </body>
+</html>

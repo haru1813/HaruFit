@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruFit - API 명세서</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+        }
+        
+        .api-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 3rem;
+            max-width: 1600px;
+            margin: 2rem auto;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 4px solid var(--primary-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--primary-color);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        h4 {
+            color: var(--gray-700);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+        }
+        
+        /* API 엔드포인트 카드 */
+        .api-endpoint {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .api-endpoint:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.1);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .method-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .method-get {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .method-post {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .method-put {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .method-delete {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .endpoint-description {
+            color: var(--gray-700);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        /* 파라미터 테이블 */
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .param-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .param-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .param-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+        
+        .required-badge {
+            background: var(--danger-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .optional-badge {
+            background: var(--gray-500);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        /* 코드 블록 */
+        .code-block {
+            background: var(--gray-800);
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .code-block::before {
+            content: attr(data-label);
+            display: block;
+            color: var(--gray-400);
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .code-block.json {
+            color: #60a5fa;
+        }
+        
+        /* 응답 예시 */
+        .response-example {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .response-example::before {
+            content: "✅ 성공 응답:";
+            display: block;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-example {
+            background: #fee2e2;
+            border-left: 4px solid var(--danger-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .error-example::before {
+            content: "❌ 오류 응답:";
+            display: block;
+            color: var(--danger-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 인증 정보 */
+        .auth-info {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .auth-info::before {
+            content: "🔐 인증:";
+            display: block;
+            color: var(--warning-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 상태 코드 */
+        .status-code {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        
+        .status-200 {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-201 {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-400 {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .status-401 {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .status-404 {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .status-500 {
+            background: var(--danger-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-container">
+        <h1>
+            <i class="bi bi-code-slash"></i> HaruFit API 명세서
+        </h1>
+        
+        <div class="alert alert-info">
+            <strong>Base URL:</strong> <code>https://api.harufit.com/v1</code><br>
+            <strong>인증 방식:</strong> 세션 기반 인증 (PHP Session)<br>
+            <strong>응답 형식:</strong> JSON<br>
+            <strong>문자 인코딩:</strong> UTF-8
+        </div>
+        
+        <!-- 공통 응답 형식 -->
+        <div class="section">
+            <h2>1. 공통 응답 형식</h2>
+            
+            <h3>1.1 성공 응답</h3>
+            <div class="code-block json" data-label="성공 응답 형식">
+{
+    "result": true,
+    "data": {
+        // 응답 데이터
+    },
+    "message": "성공 메시지"
+}
+            </div>
+            
+            <h3>1.2 오류 응답</h3>
+            <div class="code-block json" data-label="오류 응답 형식">
+{
+    "result": false,
+    "error": {
+        "code": "ERROR_CODE",
+        "message": "오류 메시지"
+    }
+}
+            </div>
+            
+            <h3>1.3 HTTP 상태 코드</h3>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>상태 코드</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="status-code status-200">200</span></td>
+                        <td>성공 (조회, 수정, 삭제)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-201">201</span></td>
+                        <td>생성 성공</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-400">400</span></td>
+                        <td>잘못된 요청 (검증 실패)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-401">401</span></td>
+                        <td>인증 실패 (로그인 필요)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-404">404</span></td>
+                        <td>리소스를 찾을 수 없음</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-500">500</span></td>
+                        <td>서버 오류</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 인증 API -->
+        <div class="section">
+            <h2>2. 인증 API</h2>
+            
+            <!-- 회원가입 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/auth/register</span>
+                </div>
+                <div class="endpoint-description">
+                    신규 사용자 회원가입을 처리합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>이메일 주소 (유효한 이메일 형식)</td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>비밀번호 (최소 8자, 영문+숫자 조합)</td>
+                        </tr>
+                        <tr>
+                            <td>nickname</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>닉네임 (2-20자)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "email": "user@example.com",
+    "password": "password123",
+    "nickname": "운동러"
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (201 Created)">
+{
+    "result": true,
+    "data": {
+        "user_id": 1,
+        "email": "user@example.com",
+        "nickname": "운동러"
+    },
+    "message": "회원가입이 완료되었습니다."
+}
+                    </div>
+                </div>
+                
+                <div class="error-example">
+                    <div class="code-block json" data-label="Error Response (400 Bad Request)">
+{
+    "result": false,
+    "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "이미 사용 중인 이메일입니다."
+    }
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 로그인 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/auth/login</span>
+                </div>
+                <div class="endpoint-description">
+                    사용자 로그인을 처리하고 세션을 생성합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>이메일 주소</td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>비밀번호</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "email": "user@example.com",
+    "password": "password123"
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "user_id": 1,
+        "email": "user@example.com",
+        "nickname": "운동러"
+    },
+    "message": "로그인 성공"
+}
+                    </div>
+                </div>
+                
+                <div class="error-example">
+                    <div class="code-block json" data-label="Error Response (401 Unauthorized)">
+{
+    "result": false,
+    "error": {
+        "code": "INVALID_CREDENTIALS",
+        "message": "이메일 또는 비밀번호가 올바르지 않습니다."
+    }
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 로그아웃 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/auth/logout</span>
+                </div>
+                <div class="endpoint-description">
+                    현재 로그인된 사용자의 세션을 종료합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": null,
+    "message": "로그아웃되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 사용자 관리 API -->
+        <div class="section">
+            <h2>3. 사용자 관리 API</h2>
+            
+            <!-- 프로필 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/user/profile</span>
+                </div>
+                <div class="endpoint-description">
+                    현재 로그인된 사용자의 프로필 정보를 조회합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "user_id": 1,
+        "email": "user@example.com",
+        "nickname": "운동러",
+        "height": 175.00,
+        "weight": 75.00,
+        "age": 30,
+        "gender": "male",
+        "created_at": "2026-01-01 00:00:00"
+    },
+    "message": "프로필 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 프로필 수정 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-put">PUT</span>
+                    <span class="endpoint-url">/api/user/profile</span>
+                </div>
+                <div class="endpoint-description">
+                    현재 로그인된 사용자의 프로필 정보를 수정합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>nickname</td>
+                            <td>string</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>닉네임 (2-20자)</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>decimal</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>키 (cm, 100-250)</td>
+                        </tr>
+                        <tr>
+                            <td>weight</td>
+                            <td>decimal</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>몸무게 (kg, 30-300)</td>
+                        </tr>
+                        <tr>
+                            <td>age</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>나이 (10-150)</td>
+                        </tr>
+                        <tr>
+                            <td>gender</td>
+                            <td>string</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>성별 (male, female, other)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "height": 175.5,
+    "weight": 75.0,
+    "age": 30,
+    "gender": "male"
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "user_id": 1,
+        "height": 175.50,
+        "weight": 75.00,
+        "age": 30,
+        "gender": "male"
+    },
+    "message": "프로필이 수정되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 루틴 관리 API -->
+        <div class="section">
+            <h2>4. 루틴 관리 API</h2>
+            
+            <!-- 루틴 목록 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/routines</span>
+                </div>
+                <div class="endpoint-description">
+                    현재 로그인된 사용자의 루틴 목록을 조회합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": [
+        {
+            "routine_id": 1,
+            "name": "상체 루틴",
+            "description": "상체 근력 운동",
+            "created_at": "2026-01-01 00:00:00",
+            "exercises": [
+                {
+                    "exercise_id": 1,
+                    "name": "벤치프레스",
+                    "sets": 3,
+                    "reps": 10,
+                    "weight": 80.00,
+                    "rest_time": 90
+                }
+            ]
+        }
+    ],
+    "message": "루틴 목록 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 루틴 상세 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/routines/{routine_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    특정 루틴의 상세 정보를 조회합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>URL 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>routine_id</td>
+                            <td>integer</td>
+                            <td>루틴 ID</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "routine_id": 1,
+        "name": "상체 루틴",
+        "description": "상체 근력 운동",
+        "created_at": "2026-01-01 00:00:00",
+        "exercises": [
+            {
+                "routine_exercise_id": 1,
+                "exercise_id": 1,
+                "exercise_name": "벤치프레스",
+                "sets": 3,
+                "reps": 10,
+                "weight": 80.00,
+                "rest_time": 90,
+                "order": 1
+            }
+        ]
+    },
+    "message": "루틴 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 루틴 생성 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/routines</span>
+                </div>
+                <div class="endpoint-description">
+                    새로운 운동 루틴을 생성합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>루틴 이름 (1-100자)</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>루틴 설명</td>
+                        </tr>
+                        <tr>
+                            <td>exercises</td>
+                            <td>array</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>운동 종목 배열 (최소 1개)</td>
+                        </tr>
+                        <tr>
+                            <td>exercises[].exercise_id</td>
+                            <td>integer</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>운동 종목 ID</td>
+                        </tr>
+                        <tr>
+                            <td>exercises[].sets</td>
+                            <td>integer</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>세트 수 (1-20)</td>
+                        </tr>
+                        <tr>
+                            <td>exercises[].reps</td>
+                            <td>integer</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>반복 횟수 (1-100)</td>
+                        </tr>
+                        <tr>
+                            <td>exercises[].weight</td>
+                            <td>decimal</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>무게 (kg, 0-500)</td>
+                        </tr>
+                        <tr>
+                            <td>exercises[].rest_time</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>휴식 시간 (초, 0-600)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "name": "상체 루틴",
+    "description": "상체 근력 운동",
+    "exercises": [
+        {
+            "exercise_id": 1,
+            "sets": 3,
+            "reps": 10,
+            "weight": 80.00,
+            "rest_time": 90
+        }
+    ]
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (201 Created)">
+{
+    "result": true,
+    "data": {
+        "routine_id": 1,
+        "name": "상체 루틴",
+        "description": "상체 근력 운동"
+    },
+    "message": "루틴이 생성되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 루틴 수정 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-put">PUT</span>
+                    <span class="endpoint-url">/api/routines/{routine_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    기존 루틴을 수정합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요하며, 루틴 소유자만 수정 가능합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <p>루틴 생성과 동일한 파라미터를 사용합니다.</p>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "routine_id": 1,
+        "name": "상체 루틴 (수정)",
+        "description": "수정된 설명"
+    },
+    "message": "루틴이 수정되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 루틴 삭제 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-delete">DELETE</span>
+                    <span class="endpoint-url">/api/routines/{routine_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    루틴을 삭제합니다. 관련된 routine_exercises 레코드도 함께 삭제됩니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요하며, 루틴 소유자만 삭제 가능합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": null,
+    "message": "루틴이 삭제되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 운동 기록 API -->
+        <div class="section">
+            <h2>5. 운동 기록 API</h2>
+            
+            <!-- 운동 기록 저장 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/workouts</span>
+                </div>
+                <div class="endpoint-description">
+                    운동 기록을 저장합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>routine_id</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>실행한 루틴 ID</td>
+                        </tr>
+                        <tr>
+                            <td>workout_date</td>
+                            <td>date</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>운동 날짜 (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td>duration</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>운동 시간 (분)</td>
+                        </tr>
+                        <tr>
+                            <td>notes</td>
+                            <td>string</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>메모</td>
+                        </tr>
+                        <tr>
+                            <td>sets</td>
+                            <td>array</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>세트별 기록 배열</td>
+                        </tr>
+                        <tr>
+                            <td>sets[].exercise_id</td>
+                            <td>integer</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>운동 종목 ID</td>
+                        </tr>
+                        <tr>
+                            <td>sets[].set_number</td>
+                            <td>integer</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>세트 번호</td>
+                        </tr>
+                        <tr>
+                            <td>sets[].weight</td>
+                            <td>decimal</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>무게 (kg)</td>
+                        </tr>
+                        <tr>
+                            <td>sets[].reps</td>
+                            <td>integer</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>반복 횟수</td>
+                        </tr>
+                        <tr>
+                            <td>sets[].rest_time</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>휴식 시간 (초)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "routine_id": 1,
+    "workout_date": "2026-01-15",
+    "duration": 45,
+    "notes": "좋은 운동이었다",
+    "sets": [
+        {
+            "exercise_id": 1,
+            "set_number": 1,
+            "weight": 80.00,
+            "reps": 10,
+            "rest_time": 90
+        }
+    ]
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (201 Created)">
+{
+    "result": true,
+    "data": {
+        "log_id": 1,
+        "workout_date": "2026-01-15",
+        "duration": 45
+    },
+    "message": "운동 기록이 저장되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 운동 기록 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/workouts</span>
+                </div>
+                <div class="endpoint-description">
+                    운동 기록 목록을 조회합니다. 날짜 범위와 루틴으로 필터링할 수 있습니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>쿼리 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>start_date</td>
+                            <td>date</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>시작 날짜 (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>date</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>종료 날짜 (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td>routine_id</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>루틴 ID</td>
+                        </tr>
+                        <tr>
+                            <td>page</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>페이지 번호 (기본값: 1)</td>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>페이지당 항목 수 (기본값: 20)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "workouts": [
+            {
+                "log_id": 1,
+                "routine_id": 1,
+                "routine_name": "상체 루틴",
+                "workout_date": "2026-01-15",
+                "duration": 45,
+                "created_at": "2026-01-15 10:00:00"
+            }
+        ],
+        "pagination": {
+            "current_page": 1,
+            "total_pages": 1,
+            "total_items": 1
+        }
+    },
+    "message": "운동 기록 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 운동 기록 상세 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/workouts/{log_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    특정 운동 기록의 상세 정보를 조회합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "log_id": 1,
+        "routine_id": 1,
+        "routine_name": "상체 루틴",
+        "workout_date": "2026-01-15",
+        "duration": 45,
+        "notes": "좋은 운동이었다",
+        "sets": [
+            {
+                "set_id": 1,
+                "exercise_id": 1,
+                "exercise_name": "벤치프레스",
+                "set_number": 1,
+                "weight": 80.00,
+                "reps": 10,
+                "rest_time": 90
+            }
+        ]
+    },
+    "message": "운동 기록 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 목표 관리 API -->
+        <div class="section">
+            <h2>6. 목표 관리 API</h2>
+            
+            <!-- 목표 목록 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/goals</span>
+                </div>
+                <div class="endpoint-description">
+                    현재 로그인된 사용자의 목표 목록을 조회합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>쿼리 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>status</td>
+                            <td>string</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>목표 상태 (active, completed, cancelled)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": [
+        {
+            "goal_id": 1,
+            "goal_type": "weight",
+            "target_value": 70.00,
+            "current_value": 75.00,
+            "deadline": "2026-06-30",
+            "status": "active",
+            "progress": 50.0,
+            "created_at": "2026-01-01 00:00:00"
+        }
+    ],
+    "message": "목표 목록 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 목표 설정 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/goals</span>
+                </div>
+                <div class="endpoint-description">
+                    새로운 목표를 설정합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>goal_type</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>목표 유형 (weight, muscle, frequency, duration, other)</td>
+                        </tr>
+                        <tr>
+                            <td>target_value</td>
+                            <td>decimal</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>목표 값</td>
+                        </tr>
+                        <tr>
+                            <td>current_value</td>
+                            <td>decimal</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>현재 값</td>
+                        </tr>
+                        <tr>
+                            <td>deadline</td>
+                            <td>date</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>목표 달성 기한 (YYYY-MM-DD)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "goal_type": "weight",
+    "target_value": 70.00,
+    "current_value": 75.00,
+    "deadline": "2026-06-30"
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (201 Created)">
+{
+    "result": true,
+    "data": {
+        "goal_id": 1,
+        "goal_type": "weight",
+        "target_value": 70.00,
+        "current_value": 75.00,
+        "deadline": "2026-06-30",
+        "status": "active"
+    },
+    "message": "목표가 설정되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 목표 수정 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-put">PUT</span>
+                    <span class="endpoint-url">/api/goals/{goal_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    기존 목표를 수정합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요하며, 목표 소유자만 수정 가능합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <p>목표 설정과 동일한 파라미터를 사용합니다 (모두 선택).</p>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "goal_id": 1,
+        "target_value": 68.00,
+        "current_value": 75.00
+    },
+    "message": "목표가 수정되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 목표 삭제 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-delete">DELETE</span>
+                    <span class="endpoint-url">/api/goals/{goal_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    목표를 삭제합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요하며, 목표 소유자만 삭제 가능합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": null,
+    "message": "목표가 삭제되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 운동 일지 API -->
+        <div class="section">
+            <h2>7. 운동 일지 API</h2>
+            
+            <!-- 일지 목록 조회 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-url">/api/journals</span>
+                </div>
+                <div class="endpoint-description">
+                    현재 로그인된 사용자의 운동 일지 목록을 조회합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>쿼리 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>start_date</td>
+                            <td>date</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>시작 날짜 (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td>end_date</td>
+                            <td>date</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>종료 날짜 (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td>page</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>페이지 번호 (기본값: 1)</td>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>integer</td>
+                            <td><span class="optional-badge">선택</span></td>
+                            <td>페이지당 항목 수 (기본값: 20)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": [
+        {
+            "journal_id": 1,
+            "workout_date": "2026-01-15",
+            "content": "오늘 상체 루틴을 완료했다...",
+            "created_at": "2026-01-15 10:00:00"
+        }
+    ],
+    "message": "일지 목록 조회 성공"
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 일지 작성 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-url">/api/journals</span>
+                </div>
+                <div class="endpoint-description">
+                    새로운 운동 일지를 작성합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>workout_date</td>
+                            <td>date</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>일지 작성 날짜 (YYYY-MM-DD)</td>
+                        </tr>
+                        <tr>
+                            <td>content</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>일지 내용 (최소 10자)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>요청 예시</h4>
+                <div class="code-block json" data-label="Request Body">
+{
+    "workout_date": "2026-01-15",
+    "content": "오늘 상체 루틴을 완료했다. 벤치프레스에서 목표 무게를 달성해서 기분이 좋다."
+}
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (201 Created)">
+{
+    "result": true,
+    "data": {
+        "journal_id": 1,
+        "workout_date": "2026-01-15",
+        "content": "오늘 상체 루틴을 완료했다..."
+    },
+    "message": "일지가 작성되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 일지 수정 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-put">PUT</span>
+                    <span class="endpoint-url">/api/journals/{journal_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    기존 일지를 수정합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요하며, 일지 소유자만 수정 가능합니다.
+                </div>
+                
+                <h4>요청 파라미터</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>파라미터</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>content</td>
+                            <td>string</td>
+                            <td><span class="required-badge">필수</span></td>
+                            <td>일지 내용 (최소 10자)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": {
+        "journal_id": 1,
+        "content": "수정된 일지 내용..."
+    },
+    "message": "일지가 수정되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 일지 삭제 -->
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method-badge method-delete">DELETE</span>
+                    <span class="endpoint-url">/api/journals/{journal_id}</span>
+                </div>
+                <div class="endpoint-description">
+                    일지를 삭제합니다.
+                </div>
+                
+                <div class="auth-info">
+                    세션 인증이 필요하며, 일지 소유자만 삭제 가능합니다.
+                </div>
+                
+                <h4>응답 예시</h4>
+                <div class="response-example">
+                    <div class="code-block json" data-label="Response (200 OK)">
+{
+    "result": true,
+    "data": null,
+    "message": "일지가 삭제되었습니다."
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 오류 코드 -->
+        <div class="section">
+            <h2>8. 오류 코드</h2>
+            
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>오류 코드</th>
+                        <th>HTTP 상태</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>VALIDATION_ERROR</td>
+                        <td>400</td>
+                        <td>입력값 검증 실패</td>
+                    </tr>
+                    <tr>
+                        <td>INVALID_CREDENTIALS</td>
+                        <td>401</td>
+                        <td>이메일 또는 비밀번호가 올바르지 않음</td>
+                    </tr>
+                    <tr>
+                        <td>UNAUTHORIZED</td>
+                        <td>401</td>
+                        <td>인증이 필요함</td>
+                    </tr>
+                    <tr>
+                        <td>FORBIDDEN</td>
+                        <td>403</td>
+                        <td>권한이 없음</td>
+                    </tr>
+                    <tr>
+                        <td>NOT_FOUND</td>
+                        <td>404</td>
+                        <td>리소스를 찾을 수 없음</td>
+                    </tr>
+                    <tr>
+                        <td>DUPLICATE_EMAIL</td>
+                        <td>400</td>
+                        <td>이미 사용 중인 이메일</td>
+                    </tr>
+                    <tr>
+                        <td>DUPLICATE_NICKNAME</td>
+                        <td>400</td>
+                        <td>이미 사용 중인 닉네임</td>
+                    </tr>
+                    <tr>
+                        <td>INTERNAL_ERROR</td>
+                        <td>500</td>
+                        <td>서버 내부 오류</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center mt-5 pt-4" style="border-top: 2px solid var(--gray-200);">
+            <p class="text-muted">문서 작성일: 2026년 1월</p>
+            <p class="text-muted">버전: 1.0</p>
+            <p class="text-muted">API 버전: v1</p>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
