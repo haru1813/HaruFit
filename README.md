@@ -35,9 +35,13 @@ docker compose up react
 ```
 
 ### 3. 접속 URL
-- React Frontend: http://localhost:3001
-- Spring Boot API: http://localhost:8081/api
-- MariaDB: localhost:3307
+- **프로덕션 (nginx)**
+  - React Frontend: http://harufit.haru.company:200
+  - Spring Boot API: http://harufitb.haru.company:200/api
+- **로컬 개발 환경**
+  - React Frontend: http://localhost:3001
+  - Spring Boot API: http://localhost:8081/api
+  - MariaDB: localhost:3307
 
 ## 프로젝트 구조
 ```
